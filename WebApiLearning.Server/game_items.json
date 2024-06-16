@@ -1,0 +1,19 @@
+{
+  "GameItems": [
+    {
+      "id": "da7ece1c-a878-46e5-9710-c60c5a7139a1",
+      "name": "Potion",
+      "price": 9.99
+    },
+    {
+      "id": "869c1efb-2da0-4513-85d2-35372dc96c64",
+      "name": "Iron Sword",
+      "price": 19.99
+    },
+    {
+      "id": "d6f07410-b244-4e8e-96a3-e63c34baf6b8",
+      "name": "Bronze Shield",
+      "price": 14.99
+    }
+  ]
+}
