@@ -1,53 +1,51 @@
 ﻿@page "/"
+@using WebApiLearning.WebApp.Clients
 @using WebApiLearning.WebApp.Models
 
 <PageTitle>Web Api Learning - Game Store</PageTitle>
-
-<table class="table table-dark table-hover mt-3">
-    <thead>
-    <th>Id</th>
-    <th>Name</th>
-    <th>Genre</th>
-    <th class="text-end">Price</th>
-    <th>Release Date</th>
-    <th/>
-    </thead>
-    <tbody>
-    @foreach (var game in _games)
-    {
-        <tr>
-            <td>@game.Id</td>
-            <td>@game.Name</td>
-            <td>@game.Genre</td>
-            <td class="text-end">@game.Price.ToString("C2")</td>
-            <td>@game.ReleaseDate</td>
-            <td>
-                <button>Edit</button>
-                <button>Delete</button>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+@if (_games is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-dark table-hover mt-3">
+        <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Genre</th>
+        <th class="text-end">Price</th>
+        <th>Release Date</th>
+        <th/>
+        </thead>
+        <tbody>
+        @foreach (var game in _games)
+        {
+            <tr>
+                <td>@game.Id</td>
+                <td>@game.Name</td>
+                <td>@game.Genre</td>
+                <td class="text-end">@game.Price.ToString("C2")</td>
+                <td>@game.ReleaseDate</td>
+                <td>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 
 @code{
-    private readonly GameSummary[] _games = 
-    [
-        new GameSummary
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Game 1",
-            Genre = "Action",
-            Price = 1.99M,
-            ReleaseDate = DateOnly.FromDateTime(dateTime: DateTime.Now)
-        },
-        new GameSummary
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Game 2",
-            Genre = "Adventure",
-            Price = 2.99M,
-            ReleaseDate = DateOnly.FromDateTime(dateTime: DateTime.Now)
-        },
-    ];
+    private readonly GamesClient _client = new GamesClient();
+    private GameSummary[]? _games;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _games = await _client.GetGamesAsync();
+    }
+
 }
+
