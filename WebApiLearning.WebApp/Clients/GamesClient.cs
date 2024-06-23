@@ -25,7 +25,6 @@ public class GamesClient
         },
     ];
     
-    
     public async Task<GameSummary[]> GetGamesAsync()
     {
         return await Task.FromResult(_gameSummaries.ToArray());

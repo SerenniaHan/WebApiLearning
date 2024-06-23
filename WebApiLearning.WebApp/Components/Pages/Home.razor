@@ -1,6 +1,12 @@
 ﻿@page "/"
+@inject GamesClient GamesClient
 
 <PageTitle>Web Api Learning - Game Store</PageTitle>
+
+<div class="mt-2">
+    <a class="btn btn-primary" role="button" href="/editgame">New Game</a>
+</div>
+
 @if (_games is null)
 {
     <p><em>Loading...</em></p>
@@ -36,13 +42,12 @@ else
 }
 
 @code{
-    private readonly GamesClient _client = new GamesClient();
+    
     private GameSummary[]? _games;
-
 
     protected override async Task OnInitializedAsync()
     {
-        _games = await _client.GetGamesAsync();
+        _games = await GamesClient.GetGamesAsync();
     }
 
 }
