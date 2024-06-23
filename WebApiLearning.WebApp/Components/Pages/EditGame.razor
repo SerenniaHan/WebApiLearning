@@ -1,0 +1,66 @@
+@page "/editgame"
+
+<PageTitle>New Game</PageTitle>
+<h3>New Game</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@Game" FormName="editGame" OnSubmit="HandleSubmitAsync">
+            <div class="mb-3">
+                <label for="gameName" class="form-label">Game Name</label>
+                <InputText class="form-control" id="gameName" @bind-Value="Game.Name"/>
+            </div>
+            <div class="mb-3">
+                <label for="gameGenre" class="form-label">Game Genre</label>
+                <InputSelect class="form-select" id="gameGenre" @bind-Value="Game.GenreId">
+                    <option value="">Select Genre</option>
+                    @if (_genres != null)
+                    {
+                        @foreach (var genre in _genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="mb-3">
+                <label for="gamePrice" class="form-label">Game Price</label>
+                <InputNumber class="form-control" id="gamePrice" @bind-Value="Game.Price"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="gameReleaseDate" class="form-label">Game Release Date</label>
+                <InputDate class="form-control" id="gameReleaseDate" @bind-Value="Game.ReleaseDate"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private readonly GamesClient _gamesClient = new();
+    private readonly GenresClient _genresClient = new();
+
+    [SupplyParameterFromForm]
+    private GameDetails Game { get; set; } = new()
+    {
+        Name = "New Game",
+        Price = 0,
+        ReleaseDate = DateOnly.FromDateTime(DateTime.Now)
+    };
+
+
+    private Genre[]? _genres;
+
+    protected override void OnInitialized()
+    {
+        _genres = _genresClient.GetGenres();
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        await _gamesClient.AddGameAsync(Game);
+    }
+}
