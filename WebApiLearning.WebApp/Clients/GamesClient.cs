@@ -4,6 +4,7 @@ namespace WebApiLearning.WebApp.Clients;
 
 public class GamesClient
 {
+    private readonly Genre[] _genres = new GenresClient().GetGenres();
     private readonly List<GameSummary> _gameSummaries =
     [
         new GameSummary
@@ -28,5 +29,22 @@ public class GamesClient
     public async Task<GameSummary[]> GetGamesAsync()
     {
         return await Task.FromResult(_gameSummaries.ToArray());
+    }
+    
+    public async Task AddGameAsync(GameDetails gameDetails)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(gameDetails.GenreId);
+
+        var genre = _genres.Single(g => g.Id == int.Parse(gameDetails.GenreId));
+        _gameSummaries.Add(new GameSummary
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = gameDetails.Name,
+            Genre = genre.Name,
+            Price = gameDetails.Price,
+            ReleaseDate = gameDetails.ReleaseDate
+        });
+        
+        await Task.CompletedTask;
     }
 }
