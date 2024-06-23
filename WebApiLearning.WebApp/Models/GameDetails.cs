@@ -4,6 +4,7 @@ namespace WebApiLearning.WebApp.Models;
 
 public class GameDetails
 {
+    public string? Id { get; set; }
     [Required] 
     [StringLength(50)]
     public required string Name { get; set; }

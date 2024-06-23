@@ -9,7 +9,9 @@
 
 @if (_games is null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
@@ -32,8 +34,11 @@ else
                 <td class="text-end">@game.Price.ToString("C2")</td>
                 <td>@game.ReleaseDate</td>
                 <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
+                    <div>
+                        <a class="btn btn-primary me-2" role="button" href="@GameUrl(game.Id)">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
         }
@@ -42,7 +47,7 @@ else
 }
 
 @code{
-    
+
     private GameSummary[]? _games;
 
     protected override async Task OnInitializedAsync()
@@ -50,5 +55,5 @@ else
         _games = await GamesClient.GetGamesAsync();
     }
 
+    private static string GameUrl(string id) => $"/editgame/{id}";
 }
-

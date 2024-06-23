@@ -1,64 +1,97 @@
 @page "/editgame"
+@page "/editgame/{id}"
+
 @inject NavigationManager NavigationManager
 @inject GamesClient GamesClient
 @inject GenresClient GenresClient
 
-<PageTitle>New Game</PageTitle>
-<h3>New Game</h3>
+<PageTitle>@_title</PageTitle>
+<h3>@_title</h3>
 
-<div class="row">
-    <div class="col-md-4">
-        <EditForm Model="@Game" FormName="editGame" OnValidSubmit="HandleSubmitAsync">
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-            <div class="mb-3">
-                <label for="gameName" class="form-label">Game Name</label>
-                <InputText class="form-control" id="gameName" @bind-Value="Game.Name"/>
-                <ValidationMessage For="() => Game.Name"/>
-            </div>
-            <div class="mb-3">
-                <label for="gameGenre" class="form-label">Game Genre</label>
-                <InputSelect class="form-select" id="gameGenre" @bind-Value="Game.GenreId">
-                    <option value="">Select Genre</option>
-                    @if (_genres != null)
-                    {
+@if (Game is null || _genres is null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="@Game" FormName="editGame" OnValidSubmit="HandleSubmitAsync">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+                <div class="mb-3">
+                    <label for="gameName" class="form-label">Game Name</label>
+                    <InputText class="form-control" id="gameName" @bind-Value="Game.Name"/>
+                    <ValidationMessage For="() => Game.Name"/>
+                </div>
+                <div class="mb-3">
+                    <label for="gameGenre" class="form-label">Game Genre</label>
+                    <InputSelect class="form-select" id="gameGenre" @bind-Value="Game.GenreId">
+                        <option value="">Select Genre</option>
+
                         @foreach (var genre in _genres)
                         {
                             <option value="@genre.Id">@genre.Name</option>
                         }
-                    }
-                </InputSelect>
-                <ValidationMessage For="() => Game.GenreId"/>
-            </div>
 
-            <div class="mb-3">
-                <label for="gamePrice" class="form-label">Game Price</label>
-                <InputNumber class="form-control" id="gamePrice" @bind-Value="Game.Price"/>
-                <ValidationMessage For="() => Game.Price"></ValidationMessage>
-            </div>
+                    </InputSelect>
+                    <ValidationMessage For="() => Game.GenreId"/>
+                </div>
 
-            <div class="mb-3">
-                <label for="gameReleaseDate" class="form-label">Game Release Date</label>
-                <InputDate class="form-control" id="gameReleaseDate" @bind-Value="Game.ReleaseDate"/>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a role="button" class="btn btn-secondary" href="/">Cancel</a>
-        </EditForm>
+                <div class="mb-3">
+                    <label for="gamePrice" class="form-label">Game Price</label>
+                    <InputNumber class="form-control" id="gamePrice" @bind-Value="Game.Price"/>
+                    <ValidationMessage For="() => Game.Price"></ValidationMessage>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gameReleaseDate" class="form-label">Game Release Date</label>
+                    <InputDate class="form-control" id="gameReleaseDate" @bind-Value="Game.ReleaseDate"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a role="button" class="btn btn-secondary" href="/">Cancel</a>
+            </EditForm>
+        </div>
     </div>
-</div>
+}
 
 @code {
 
-    [SupplyParameterFromForm]
-    private GameDetails Game { get; set; } = new()
-    {
-        Name = "New Game",
-        Price = 0,
-        ReleaseDate = DateOnly.FromDateTime(DateTime.Now)
-    };
+    [Parameter] public string? Id { get; set; }
+
+    [SupplyParameterFromForm] private GameDetails? Game { get; set; }
 
 
     private Genre[]? _genres;
+
+    private string _title = string.Empty;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Game is not null)
+        {
+            return;
+        }
+
+        if (Id is not null)
+        {
+            Game = await GamesClient.GetGameAsync(Id);
+            _title = $"Edit {Game.Name}";
+        }
+        else
+        {
+            Game = new GameDetails
+            {
+                Name = "New Game",
+                Price = 0,
+                ReleaseDate = DateOnly.FromDateTime(DateTime.Now)
+            };
+            _title = "New Game";
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -67,7 +100,19 @@
 
     private async Task HandleSubmitAsync()
     {
-        await GamesClient.AddGameAsync(Game);
+        ArgumentNullException.ThrowIfNull(Game);
+
+        if (Id is null)
+        {
+            await GamesClient.AddGameAsync(Game);
+        }
+        else
+        {
+            Game.Id = Id;
+            await GamesClient.UpdateGameAsync(Game);
+        }
+
         NavigationManager.NavigateTo("/");
     }
+
 }
