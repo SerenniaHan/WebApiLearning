@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebApiLearning.Infrastructure\WebApiLearning.Infrastructure.csproj" />
+    <ProjectReference Include="..\WebApiLearning.Contracts\WebApiLearning.Contracts.csproj" />
+    <ProjectReference Include="..\WebApiLearning.Core\WebApiLearning.Core.csproj" />
+  </ItemGroup>
+</Project>

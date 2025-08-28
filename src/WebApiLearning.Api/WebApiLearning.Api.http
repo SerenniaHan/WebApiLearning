@@ -1,0 +1,10 @@
+@WebApiLearning.Api_HostAddress = https://localhost:7031
+
+GET {{WebApiLearning.Api_HostAddress}}/
+Accept: application/json
+
+###
+GET {{WebApiLearning.Api_HostAddress}}/api/gamestore/
+Accept: application/json
+
+###
