@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using WebApiLearning.Core.Entities;
@@ -5,10 +6,16 @@ using WebApiLearning.Core.Repository;
 
 namespace WebApiLearning.Infrastructure.Repositories;
 
-public class MongoDbRepository(IMongoClient mongoClient) : IGameStoreRepository
+public class MongoDbRepository : IGameStoreRepository
 {
-    private readonly IMongoCollection<GameItem> _items = mongoClient.GetDatabase("GameStore").GetCollection<GameItem>("GameItems");
+    private readonly IMongoCollection<GameItem> _items;
     private readonly FilterDefinitionBuilder<GameItem> _filterBuilder = Builders<GameItem>.Filter;
+
+    public MongoDbRepository(IMongoClient mongoClient, IConfiguration configuration)
+    {
+        var database = mongoClient.GetDatabase(configuration["MongoDbSettings:DatabaseName"]);
+        _items = database.GetCollection<GameItem>(configuration["MongoDbSettings:CollectionName"]);
+    }
 
 
     public Task CreateItemAsync(GameItem item)

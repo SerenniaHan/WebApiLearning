@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
@@ -14,15 +15,12 @@ public static class Extensions
         return services.AddSingleton<IGameStoreRepository, InMemoryRepository>();
     }
 
-    public static IServiceCollection AddMongoDbRepository(this IServiceCollection services)
+    public static IServiceCollection AddMongoDbRepository(this IServiceCollection services, IConfiguration configuration)
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
         BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
 
-        services.AddSingleton<IMongoClient>(_ =>
-        {
-            return new MongoClient("mongodb://localhost:27017");
-        });
+        services.AddSingleton<IMongoClient>(_ => new MongoClient(configuration["MongoDbSettings:ConnectionString"] ?? throw new Exception("MongoDB connection string is not configured.")));
 
         services.AddSingleton<IGameStoreRepository, MongoDbRepository>();
 

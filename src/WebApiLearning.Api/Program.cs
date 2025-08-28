@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 // builder.Services.AddInMemoryRepository();
-builder.Services.AddMongoDbRepository();
+builder.Services.AddMongoDbRepository(builder.Configuration);
 
 var app = builder.Build();
 
