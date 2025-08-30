@@ -21,6 +21,11 @@ public static class Extensions
         BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
 
         services.AddSingleton<IMongoClient>(_ => new MongoClient(configuration["MongoDbSettings:ConnectionString"] ?? throw new Exception("MongoDB connection string is not configured.")));
+        services.AddSingleton(services =>
+        {
+            var client = services.GetRequiredService<IMongoClient>();
+            return client.GetDatabase(configuration["MongoDbSettings:DatabaseName"] ?? throw new Exception("MongoDB database name is not configured."));
+        });
 
         services.AddSingleton<IGameStoreRepository, MongoDbRepository>();
 

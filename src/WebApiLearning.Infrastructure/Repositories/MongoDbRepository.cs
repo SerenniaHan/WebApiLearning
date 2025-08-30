@@ -8,15 +8,14 @@ namespace WebApiLearning.Infrastructure.Repositories;
 
 public class MongoDbRepository : IGameStoreRepository
 {
+    private readonly string _collectionName = "GameItems";
     private readonly IMongoCollection<GameItem> _items;
     private readonly FilterDefinitionBuilder<GameItem> _filterBuilder = Builders<GameItem>.Filter;
 
-    public MongoDbRepository(IMongoClient mongoClient, IConfiguration configuration)
+    public MongoDbRepository(IMongoDatabase database)
     {
-        var database = mongoClient.GetDatabase(configuration["MongoDbSettings:DatabaseName"]);
-        _items = database.GetCollection<GameItem>(configuration["MongoDbSettings:CollectionName"]);
+        _items = database.GetCollection<GameItem>(_collectionName);
     }
-
 
     public Task CreateItemAsync(GameItem item)
     {
@@ -35,7 +34,8 @@ public class MongoDbRepository : IGameStoreRepository
 
     public async Task<IEnumerable<GameItem>> GetItemsAsync()
     {
-        return await _items.Find(new BsonDocument()).ToListAsync();
+        return await (await _items.FindAsync(FilterDefinition<GameItem>.Empty)).ToListAsync();
+        // return await _items.Find(new BsonDocument()).ToListAsync();
     }
 
     public Task UpdateItemAsync(GameItem item)
