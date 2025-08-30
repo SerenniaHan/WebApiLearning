@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebApiLearning.Contracts;
 using WebApiLearning.Core.Entities;
@@ -17,7 +15,7 @@ public static class GameStoreEndpoints
         group.MapGet("/", async (IGameStoreRepository repo) =>
         {
             var items = await repo.GetItemsAsync();
-            return new ActionResult<IEnumerable<GameItemResponse>>(items.Select(i => i.ToGameItemResponse()));
+            return Results.Ok(items.Select(i => i.ToGameItemResponse()));
         });
 
         // get game item by id
