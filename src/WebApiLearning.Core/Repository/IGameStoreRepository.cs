@@ -18,7 +18,7 @@ public interface IGameStoreRepository
     /// </summary>
     /// <param name="id">The unique identifier of the game item.</param>
     /// <returns>The <see cref="GameItem"/> if found; otherwise, null.</returns>
-    Task<GameItem?> GetItemAsync(string id);
+    Task<GameItem?> GetItemAsync(Guid id);
 
     /// <summary>
     /// Creates a new game item in the store.
@@ -36,5 +36,5 @@ public interface IGameStoreRepository
     /// Deletes a game item from the store by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the game item to delete.</param>
-    Task DeleteItemAsync(string id);
+    Task DeleteItemAsync(Guid id);
 }

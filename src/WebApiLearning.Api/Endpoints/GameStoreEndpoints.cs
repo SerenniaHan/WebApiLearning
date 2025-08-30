@@ -19,9 +19,8 @@ public static class GameStoreEndpoints
         });
 
         // get game item by id
-        group.MapGet("/{id}", async (string? id, IGameStoreRepository repo) =>
+        group.MapGet("/{id:guid}", async (Guid id, IGameStoreRepository repo) =>
         {
-            if (id is null) return Results.BadRequest();
             var item = await repo.GetItemAsync(id);
             if (item is null) return Results.NotFound();
             return Results.Ok(item.ToGameItemResponse());
@@ -36,9 +35,8 @@ public static class GameStoreEndpoints
         });
 
         // update game item
-        group.MapPut("/{id}", async (string? id, [FromBody] UpdateGameItemRequest? request, IGameStoreRepository repo) =>
+        group.MapPut("/{id:guid}", async (Guid id, [FromBody] UpdateGameItemRequest? request, IGameStoreRepository repo) =>
         {
-            if (id is null) return Results.BadRequest();
             if (request is null) return Results.BadRequest();
 
             var existingItem = await repo.GetItemAsync(id);
@@ -91,14 +89,14 @@ public static class GameStoreEndpoints
         }); */
 
         // delete game item
-        group.MapDelete("/{id}", async (string? id, IGameStoreRepository repo) =>
+        group.MapDelete("/{id:guid}", async (Guid? id, IGameStoreRepository repo) =>
         {
             if (id is null) return Results.BadRequest();
 
-            var existingItem = await repo.GetItemAsync(id);
+            var existingItem = await repo.GetItemAsync(id.Value);
             if (existingItem is null) return Results.NotFound();
 
-            await repo.DeleteItemAsync(id);
+            await repo.DeleteItemAsync(id.Value);
             return Results.NoContent();
         });
 

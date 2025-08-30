@@ -13,15 +13,15 @@ public sealed class InMemoryRepository : IGameStoreRepository
         return Task.CompletedTask;
     }
 
-    public Task DeleteItemAsync(string id)
+    public Task DeleteItemAsync(Guid id)
     {
-        _items.RemoveAll(item => item.Id.ToString() == id);
+        _items.RemoveAll(item => item.Id.ToString() == id.ToString());
         return Task.CompletedTask;
     }
 
-    public Task<GameItem?> GetItemAsync(string id)
+    public Task<GameItem?> GetItemAsync(Guid id)
     {
-        var item = _items.SingleOrDefault(item => item.Id.ToString() == id);
+        var item = _items.SingleOrDefault(item => item.Id.ToString() == id.ToString());
         return Task.FromResult(item);
     }
 

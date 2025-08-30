@@ -22,14 +22,15 @@ public class MongoDbRepository : IGameStoreRepository
         return _items.InsertOneAsync(item);
     }
 
-    public Task DeleteItemAsync(string id)
+    public Task DeleteItemAsync(Guid id)
     {
-        return _items.DeleteOneAsync(_filterBuilder.Eq(i => i.Id.ToString(), id));
+        return _items.DeleteOneAsync(_filterBuilder.Eq(i => i.Id, id));
     }
 
-    public async Task<GameItem?> GetItemAsync(string id)
+    public async Task<GameItem?> GetItemAsync(Guid id)
     {
-        return await _items.Find(_filterBuilder.Eq(i => i.Id.ToString(), id)).SingleOrDefaultAsync();
+        return await _items.Find(_filterBuilder.Eq(i => i.Id, id)).FirstOrDefaultAsync();
+        // return await _items.Find(_filterBuilder.Where(x => x.Id.ToString() == id)).SingleOrDefaultAsync();
     }
 
     public async Task<IEnumerable<GameItem>> GetItemsAsync()
