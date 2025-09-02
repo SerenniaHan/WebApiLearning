@@ -1,5 +1,6 @@
 using LanguageExt;
 using LanguageExt.Common;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using WebApiLearning.Contracts;
 using WebApiLearning.Core.Entities;
@@ -39,6 +40,19 @@ public static class GameStoreEndpoints
         //     return Results.Ok(item.ToGameItemResponse());
         // });
         
+        group.MapGet("/get", async ([FromQuery]string id, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
+        {
+            return (await command.HandleAsync(new GetItemRequest(new Guid(id)))).Match
+            (
+                Succ: option => option.Match(
+                    Some: Results.Ok,
+                    None: () => Results.NotFound()
+                ),
+                Fail: ex => Results.Problem(ex.Message)
+            );
+        });
+        
+        
         
         group.MapGet("/{id:guid}", async (Guid id, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
         {
@@ -51,7 +65,27 @@ public static class GameStoreEndpoints
                 Fail: ex => Results.Problem(ex.Message)
             );
         });
+        
+        group.MapPost("/getbyid", async ([FromBody] GetItemRequest request, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
+        {
+            return (await command.HandleAsync(request)).Match
+            (
+                Succ: option => option.Match(
+                    Some: Results.Ok,
+                    None: () => Results.NotFound()
+                ),
+                Fail: ex => Results.Problem(ex.Message)
+            );
+        });
 
+        // create new game from a query string
+        group.MapPost("/create", async ([FromQuery(Name = "ItemName")]string name, [FromQuery(Name = "ItemPrice")]double price, IGameStoreRepository repo) =>
+        {
+            var item = new GameItem(Guid.NewGuid(), name, price);
+            await repo.CreateItemAsync(item);
+            return Results.Created($"/api/gamestore/{item.Id}", item.ToGameItemResponse());
+        });
+        
         // create new game item
         group.MapPost("/", async ([FromBody] CreateGameItemRequest request, IGameStoreRepository repo) =>
         {
