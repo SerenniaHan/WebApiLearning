@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Moq;
 using Shouldly;
@@ -34,23 +35,29 @@ public class UnitTest1(ITestOutputHelper testOutputHelper)
 
 
         moqCollection.Setup(c => c.FindAsync(
-         It.IsAny<ExpressionFilterDefinition<GameItem>>(),
+         It.IsAny<FilterDefinition<GameItem>>(),
          It.IsAny<FindOptions<GameItem, GameItem>>(),
          It.IsAny<CancellationToken>()
-       )).ReturnsAsync((ExpressionFilterDefinition<GameItem> filter, FindOptions<GameItem, GameItem> options, CancellationToken cancellationToken) =>
+       )).ReturnsAsync((FilterDefinition<GameItem> filter, FindOptions<GameItem, GameItem> options, CancellationToken cancellationToken) =>
         {
+            
+            var registry = BsonSerializer.SerializerRegistry;
+            var serializer = registry.GetSerializer<GameItem>();
+            var doc = filter.Render(new RenderArgs<GameItem>(serializer, registry));
+            
             var filtered = ApplyFilter(gameItems, filter);
             var mockCursor2 = new Mock<IAsyncCursor<GameItem>>();
-            mockCursor2.Setup(_ => _.Current).Returns(filtered);
-            mockCursor2.SetupSequence(_ => _.MoveNextAsync(It.IsAny<CancellationToken>()))
+            mockCursor2.Setup(cursor => cursor.Current).Returns(filtered);
+            mockCursor2.SetupSequence(cursor => cursor.MoveNextAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true)
                 .ReturnsAsync(false);
             return mockCursor2.Object;
         });
 
         var filter = Builders<GameItem>.Filter;
-        var actual = await (await moqCollection.Object.FindAsync(x => x.Price == 19.99)).ToListAsync();
-
+        // var actual = await (await moqCollection.Object.FindAsync(x => x.Price == 19.99)).ToListAsync();
+        var actual = await (await moqCollection.Object.FindAsync(filter.Eq(i => i.Price, 19.99))).ToListAsync();
+        
         foreach (var item in actual)
         {
             testOutputHelper.WriteLine(item.Name);

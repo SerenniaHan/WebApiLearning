@@ -1,7 +1,11 @@
+using LanguageExt;
+using LanguageExt.Common;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using WebApiLearning.Contracts;
 using WebApiLearning.Core.Entities;
 using WebApiLearning.Core.Repository;
+using WebApiLearning.Core.UseCases;
 
 namespace WebApiLearning.Api.Endpoints;
 
@@ -11,21 +15,77 @@ public static class GameStoreEndpoints
     {
         var group = builder.MapGroup("/api/gamestore");
 
-        // get all game items
-        group.MapGet("/", async (IGameStoreRepository repo) =>
+        // // get all game items
+        // group.MapGet("/", async (IGameStoreRepository repo) =>
+        // {
+        //     var items = await repo.GetItemsAsync();
+        //     return Results.Ok(items.Select(i => i.ToGameItemResponse()));
+        // });
+
+        group.MapGet("/", async (ICommandAsync<Result<AllGameItemsResponse>> command) =>
         {
-            var items = await repo.GetItemsAsync();
-            return Results.Ok(items.Select(i => i.ToGameItemResponse()));
+            return (await command.HandleAsync()).Match
+            (
+                Succ: response => Results.Ok(response),
+                Fail: ex => Results.Problem(ex.Message)
+            );
+        });
+        
+
+        // // get game item by id
+        // group.MapGet("/{id:guid}", async (Guid id, IGameStoreRepository repo) =>
+        // {
+        //     var item = await repo.GetItemAsync(id);
+        //     if (item is null) return Results.NotFound();
+        //     return Results.Ok(item.ToGameItemResponse());
+        // });
+        
+        group.MapGet("/get", async ([FromQuery]string id, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
+        {
+            return (await command.HandleAsync(new GetItemRequest(new Guid(id)))).Match
+            (
+                Succ: option => option.Match(
+                    Some: Results.Ok,
+                    None: () => Results.NotFound()
+                ),
+                Fail: ex => Results.Problem(ex.Message)
+            );
+        });
+        
+        
+        
+        group.MapGet("/{id:guid}", async (Guid id, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
+        {
+            return (await command.HandleAsync(new GetItemRequest(id))).Match
+            (
+                Succ: option => option.Match(
+                    Some: Results.Ok,
+                    None: () => Results.NotFound()
+                ),
+                Fail: ex => Results.Problem(ex.Message)
+            );
+        });
+        
+        group.MapPost("/getbyid", async ([FromBody] GetItemRequest request, ICommandAsync<GetItemRequest, Result<Option<GameItemResponse>>> command) =>
+        {
+            return (await command.HandleAsync(request)).Match
+            (
+                Succ: option => option.Match(
+                    Some: Results.Ok,
+                    None: () => Results.NotFound()
+                ),
+                Fail: ex => Results.Problem(ex.Message)
+            );
         });
 
-        // get game item by id
-        group.MapGet("/{id:guid}", async (Guid id, IGameStoreRepository repo) =>
+        // create new game from a query string
+        group.MapPost("/create", async ([FromQuery(Name = "ItemName")]string name, [FromQuery(Name = "ItemPrice")]double price, IGameStoreRepository repo) =>
         {
-            var item = await repo.GetItemAsync(id);
-            if (item is null) return Results.NotFound();
-            return Results.Ok(item.ToGameItemResponse());
+            var item = new GameItem(Guid.NewGuid(), name, price);
+            await repo.CreateItemAsync(item);
+            return Results.Created($"/api/gamestore/{item.Id}", item.ToGameItemResponse());
         });
-
+        
         // create new game item
         group.MapPost("/", async ([FromBody] CreateGameItemRequest request, IGameStoreRepository repo) =>
         {

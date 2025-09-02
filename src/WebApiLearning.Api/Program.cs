@@ -1,5 +1,6 @@
 using Scalar.AspNetCore;
 using WebApiLearning.Api.Endpoints;
+using WebApiLearning.Core;
 using WebApiLearning.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 // builder.Services.AddInMemoryRepository();
+builder.Services.AddWebApiLearningCore();
 builder.Services.AddMongoDbRepository(builder.Configuration);
 
 var app = builder.Build();
