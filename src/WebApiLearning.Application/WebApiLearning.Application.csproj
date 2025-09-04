@@ -6,9 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApiLearning.Contracts\WebApiLearning.Contracts.csproj" />
+    <ProjectReference Include="..\WebApiLearning.Domain\WebApiLearning.Domain.csproj" />
   </ItemGroup>
 </Project>

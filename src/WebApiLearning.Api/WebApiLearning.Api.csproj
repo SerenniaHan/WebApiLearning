@@ -8,10 +8,11 @@
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.7.2" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApiLearning.Infrastructure\WebApiLearning.Infrastructure.csproj" />
-    <ProjectReference Include="..\WebApiLearning.Contracts\WebApiLearning.Contracts.csproj" />
+    <ProjectReference Include="..\WebApiLearning.Application\WebApiLearning.Application.csproj" />
+    <ProjectReference Include="..\WebApiLearning.Infrastructure.Mongo\WebApiLearning.Infrastructure.Mongo.csproj" />
     <ProjectReference Include="..\WebApiLearning.Core\WebApiLearning.Core.csproj" />
   </ItemGroup>
 </Project>
