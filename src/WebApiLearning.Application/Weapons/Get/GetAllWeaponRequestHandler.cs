@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Get;
 
-internal class GetAllWeaponRequestHandler(IGameObjectRepository<Weapon> repository)
+internal class GetAllWeaponRequestHandler(IGameItemRepository<Weapon> repository)
     : IRequestHandler<GetAllWeaponRequest, Option<IReadOnlyCollection<Weapon>>>
 {
     public async Task<Option<IReadOnlyCollection<Weapon>>> Handle(

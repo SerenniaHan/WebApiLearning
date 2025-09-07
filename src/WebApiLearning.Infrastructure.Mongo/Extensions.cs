@@ -35,8 +35,9 @@ public static class Extensions
             );
         });
 
-        services.AddSingleton<IGameObjectRepository<Weapon>, WeaponsRepository>();
-
+        services.AddSingleton<IGameItemRepository<Weapon>, WeaponsRepository>();
+        services.AddSingleton<IShopRepository, ShopRepository>();
+        services.AddSingleton<IInventoryRepository, InventoriesRepository>();
         return services;
     }
 }

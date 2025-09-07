@@ -35,5 +35,7 @@ app.MapGet("/", () => "Hello GameStore!");
 app.UseHttpsRedirection();
 
 app.MapWeaponEndpoints();
+app.MapShopEndpoints();
+app.MapInventoryEndpoints();
 
 app.Run();

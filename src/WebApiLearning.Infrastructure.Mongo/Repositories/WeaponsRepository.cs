@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Infrastructure.Mongo.Repositories;
 
-public class WeaponsRepository : IGameObjectRepository<Weapon>
+public class WeaponsRepository : IGameItemRepository<Weapon>
 {
     private readonly string _collectionName = "Weapons";
     private readonly IMongoCollection<Weapon> _weapons;

@@ -6,7 +6,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Get;
 
-internal class GetWeaponByIdRequestHandler(IGameObjectRepository<Weapon> repository)
+internal class GetWeaponByIdRequestHandler(IGameItemRepository<Weapon> repository)
     : IRequestHandler<GetWeaponByIdRequest, Result<Option<Weapon>>>
 {
     public async Task<Result<Option<Weapon>>> Handle(

@@ -2,8 +2,8 @@
 
 namespace WebApiLearning.Domain.Repository;
 
-public interface IGameObjectRepository<T>
-    where T : IGameObject
+public interface IGameItemRepository<T>
+    where T : IHasGuid
 {
     Task CreateGameObjectAsync(T gameObject);
     Task<T> GetGameObjectByIdAsync(Guid id);

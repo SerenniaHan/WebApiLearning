@@ -13,6 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\WebApiLearning.Application\WebApiLearning.Application.csproj" />
     <ProjectReference Include="..\WebApiLearning.Infrastructure.Mongo\WebApiLearning.Infrastructure.Mongo.csproj" />
-    <ProjectReference Include="..\WebApiLearning.Core\WebApiLearning.Core.csproj" />
   </ItemGroup>
 </Project>

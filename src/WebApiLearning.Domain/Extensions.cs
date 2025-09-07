@@ -6,7 +6,6 @@ public static class Extensions
 {
     public static IServiceCollection AddWebApiLearningCore(this IServiceCollection services)
     {
-        
         return services;
     }
 }

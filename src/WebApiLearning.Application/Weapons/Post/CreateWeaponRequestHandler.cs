@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Post;
 
-internal class CreateWeaponRequestHandler(IGameObjectRepository<Weapon> repository)
+internal class CreateWeaponRequestHandler(IGameItemRepository<Weapon> repository)
     : IRequestHandler<CreateWeaponRequest, Result<Weapon>>
 {
     public async Task<Result<Weapon>> Handle(
