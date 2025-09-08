@@ -7,7 +7,7 @@ namespace WebApiLearning.Infrastructure.Mongo.Repositories;
 
 public class ShopRepository : IShopRepository
 {
-    private readonly string _collectionName = "Shops";
+    private readonly string _collectionName = "shops";
     private readonly IMongoCollection<Shop> _collection;
     private readonly FilterDefinitionBuilder<Shop> _filterBuilder = Builders<Shop>.Filter;
 

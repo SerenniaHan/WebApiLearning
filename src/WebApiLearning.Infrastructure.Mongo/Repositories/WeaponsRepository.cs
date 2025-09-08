@@ -7,7 +7,7 @@ namespace WebApiLearning.Infrastructure.Mongo.Repositories;
 
 public class WeaponsRepository : IGameItemRepository<Weapon>
 {
-    private readonly string _collectionName = "Weapons";
+    private readonly string _collectionName = "game_items";
     private readonly IMongoCollection<Weapon> _weapons;
     private readonly FilterDefinitionBuilder<Weapon> _filterBuilder = Builders<Weapon>.Filter;
 
