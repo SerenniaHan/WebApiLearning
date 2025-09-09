@@ -10,5 +10,5 @@ public enum ERarity
     Rare,
     Epic,
     Legendary,
-    Mythic
+    Mythic,
 }
