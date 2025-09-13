@@ -11,4 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WebApiLearning.Domain\WebApiLearning.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Inventories\Queries\" />
+  </ItemGroup>
 </Project>

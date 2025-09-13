@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApiLearning.Application.Weapons.Delete;
-using WebApiLearning.Application.Weapons.Get;
-using WebApiLearning.Application.Weapons.Post;
-using WebApiLearning.Application.Weapons.Put;
+using WebApiLearning.Application.Weapons.Commands.CreateWeapon;
+using WebApiLearning.Application.Weapons.Commands.DeleteWeaponById;
+using WebApiLearning.Application.Weapons.Commands.UpdateWeapon;
+using WebApiLearning.Application.Weapons.Queries.GetAllWeapon;
+using WebApiLearning.Application.Weapons.Queries.GetWeaponById;
 using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Api.Endpoints;
@@ -36,7 +37,7 @@ public static class WeaponEndpoints
                 [FromQuery] int purchasePrice,
                 [FromQuery] int sellPrice,
                 [FromQuery] int damage,
-                [FromQuery] float attackSpeed,
+                [FromQuery] decimal attackSpeed,
                 ISender sender
             ) =>
             {

@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApiLearning.Application.Inventories.Post;
+using WebApiLearning.Application.Inventories.Commands.CreateInventory;
 
 namespace WebApiLearning.Api.Endpoints;
 

@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApiLearning.Application.Shops.Get;
-using WebApiLearning.Application.Shops.Post;
+using WebApiLearning.Application.Shops.Commands.CreateShop;
+using WebApiLearning.Application.Shops.Queries.GetAllShops;
+using WebApiLearning.Application.Shops.Queries.GetShopById;
+using WebApiLearning.Application.Shops.Queries.GetShopInventories;
 
 namespace WebApiLearning.Api.Endpoints;
 
