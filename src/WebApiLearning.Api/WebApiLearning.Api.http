@@ -1,10 +1,10 @@
-@WebApiLearning.Api_HostAddress = https://localhost:7031
 
-GET {{WebApiLearning.Api_HostAddress}}/
+### GET request to example server
+GET https://localhost:7031/
 Accept: application/json
-
 ###
-GET {{WebApiLearning.Api_HostAddress}}/api/gamestore/
-Accept: application/json
 
+### Get all weapons
+GET https://localhost:7031/api/weapons/
+Accept: application/json
 ###

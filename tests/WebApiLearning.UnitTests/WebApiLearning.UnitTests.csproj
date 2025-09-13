@@ -19,6 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\WebApiLearning.Core\WebApiLearning.Core.csproj" />
-    <ProjectReference Include="..\..\src\WebApiLearning.Infrastructure\WebApiLearning.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\WebApiLearning.Infrastructure.Mongo\WebApiLearning.Infrastructure.Mongo.csproj" />
   </ItemGroup>
 </Project>

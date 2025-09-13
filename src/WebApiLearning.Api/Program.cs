@@ -1,7 +1,9 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Scalar.AspNetCore;
 using WebApiLearning.Api.Endpoints;
-using WebApiLearning.Core;
-using WebApiLearning.Infrastructure;
+using WebApiLearning.Application;
+using WebApiLearning.Infrastructure.Mongo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// builder.Services.AddInMemoryRepository();
-builder.Services.AddWebApiLearningCore();
-builder.Services.AddMongoDbRepository(builder.Configuration);
+builder.Services.UseMongoRepositories(builder.Configuration);
+builder.Services.AddApplicationLayer();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(
+        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false)
+    );
+});
 
 var app = builder.Build();
 
@@ -25,6 +32,9 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/", () => "Hello GameStore!");
 
 app.UseHttpsRedirection();
-app.MapGameStoreEndpoints();
+
+app.MapWeaponEndpoints();
+app.MapShopEndpoints();
+app.MapInventoryEndpoints();
 
 app.Run();
