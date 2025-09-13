@@ -16,9 +16,11 @@ public static class Extensions
         IConfiguration configuration
     )
     {
-        BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
         BsonSerializer.RegisterSerializer(
             new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String)
+        );
+        BsonSerializer.RegisterSerializer<ERarity>(
+            new EnumSerializer<ERarity>(MongoDB.Bson.BsonType.String)
         );
 
         services.AddSingleton<IMongoClient>(_ => new MongoClient(
