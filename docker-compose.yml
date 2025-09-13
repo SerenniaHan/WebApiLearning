@@ -10,6 +10,36 @@ services:
       - game_store_volume:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d:ro
     restart: unless-stopped
+    networks:
+      - game_store_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "mongodb://mongo:27017", "--eval", "db.adminCommand({ping: 1})"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: game_store_webapi:dev
+    container_name: game_store_webapi
+    ports:
+      - "7031:80"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:80
+        - MongoDbSettings__ConnectionString=mongodb://mongo:27017
+        - MongoDbSettings__DatabaseName=game_store
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - game_store_network
+
+networks:
+  game_store_network:
+    external: false
 
 volumes:
   game_store_volume:
