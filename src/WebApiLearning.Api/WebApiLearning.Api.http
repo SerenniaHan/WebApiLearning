@@ -1,0 +1,10 @@
+
+### GET request to example server
+GET https://localhost:7031/
+Accept: application/json
+###
+
+### Get all weapons
+GET https://localhost:7031/api/weapons/
+Accept: application/json
+###
