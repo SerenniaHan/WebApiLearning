@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using Scalar.AspNetCore;
 using WebApiLearning.Api.Endpoints;
 using WebApiLearning.Application;
-using WebApiLearning.Domain.Entities;
 using WebApiLearning.Infrastructure.Mongo;
 
 var builder = WebApplication.CreateBuilder(args);
