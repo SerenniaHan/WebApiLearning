@@ -1,3 +1,4 @@
+using WebApiLearning.Blazor.Models;
 using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Services;
@@ -18,5 +19,14 @@ public class WeaponService
     {
         var response = _httpClient.PostAsJsonAsync("api/weapons", weapon);
         return response.ContinueWith(t => t.Result.IsSuccessStatusCode);
+    }
+
+    public Task<Weapon?> GetWeaponById(Guid id) =>
+        _httpClient.GetFromJsonAsync<Weapon?>($"api/weapons/{id}");
+
+    public Task UpdateWeapon(Guid id, WeaponDetails weaponDetails)
+    {
+        var response = _httpClient.PutAsJsonAsync($"api/weapons/{id}", weaponDetails);
+        return response.ContinueWith(t => t.Result.EnsureSuccessStatusCode());
     }
 }
