@@ -29,4 +29,10 @@ public class WeaponService
         var response = _httpClient.PutAsJsonAsync($"api/weapons/{id}", weaponDetails);
         return response.ContinueWith(t => t.Result.EnsureSuccessStatusCode());
     }
+
+    public Task DeleteWeaponAsync(Guid id)
+    {
+        var response = _httpClient.DeleteAsync($"api/weapons/{id}");
+        return response.ContinueWith(t => t.Result.EnsureSuccessStatusCode());
+    }
 }
