@@ -35,9 +35,6 @@ bld/
 # .idea
 .idea/
 
-# vscode
-.vscode/
-
 # mac os
 .DS_Store
 
