@@ -44,7 +44,12 @@ else
                             <a class="btn btn-primary me-2" role="button" href="@EditWeaponUrl(weapon.Id)">
                                 <i class="bi bi-pencil"></i>
                             </a>
+                            <button class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#@DeleteWeapon.GetModalId(weapon)">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
+                        <DeleteWeapon Weapon="@weapon" />
                     </td>
                 </tr>
             }

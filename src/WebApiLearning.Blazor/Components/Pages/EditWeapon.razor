@@ -1,7 +1,7 @@
 @page "/editweapon"
 @page "/editweapon/{id:guid}"
-@using WebApiLearning.Domain.Entities
-@using WebApiLearning.Blazor.Models
+@rendermode InteractiveServer
+
 @attribute [StreamRendering]
 @inject WeaponService WeaponService
 @inject NavigationManager NavigationManager
