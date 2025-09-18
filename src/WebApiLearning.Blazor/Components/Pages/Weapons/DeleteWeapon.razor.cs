@@ -1,8 +1,7 @@
-
 using Microsoft.AspNetCore.Components;
 using WebApiLearning.Domain.Entities;
 
-namespace WebApiLearning.Blazor.Components.Pages;
+namespace WebApiLearning.Blazor.Components.Pages.Weapons;
 
 public partial class DeleteWeapon
 {
@@ -32,6 +31,6 @@ public partial class DeleteWeapon
 
         await WeaponService.DeleteWeaponAsync(Weapon.Id);
         NavigationManager.Refresh();
-        @* NavigationManager.NavigateTo("/weapons", forceLoad: true); *@
+        //NavigationManager.NavigateTo("/weapons", forceLoad: true);
     }
 }

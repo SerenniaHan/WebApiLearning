@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using WebApiLearning.Blazor.Models;
 using WebApiLearning.Domain.Entities;
 
-namespace WebApiLearning.Blazor.Components.Pages;
+namespace WebApiLearning.Blazor.Components.Pages.Weapons;
 
 public partial class EditWeapon
 {
