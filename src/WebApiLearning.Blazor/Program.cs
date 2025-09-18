@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<WeaponService>();
+builder.Services.AddSingleton<ShopService>();
 
 var app = builder.Build();
 
