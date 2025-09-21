@@ -31,4 +31,17 @@ public class ShopRepository : IShopRepository
     {
         await _collection.InsertOneAsync(shop);
     }
+
+    public async Task UpdateShopAsync(Shop shop)
+    {
+        await _collection.ReplaceOneAsync(
+            _filterBuilder.Eq(existingShop => existingShop.Id, shop.Id),
+            shop
+        );
+    }
+
+    public async Task DeleteByIdAsync(Guid id)
+    {
+        await _collection.DeleteOneAsync(_filterBuilder.Eq(shop => shop.Id, id));
+    }
 }

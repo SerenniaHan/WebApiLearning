@@ -10,7 +10,7 @@
     <div class="form-text mb-5">This is a shop page.</div>
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <a class="btn btn-primary" role="button" href="/edit-shop">New Shop</a>
+            <a class="btn btn-primary" role="button" href="/shops/create">New Shop</a>
         </div>
         <div class="col-auto">
         </div>
@@ -33,6 +33,7 @@ else
             <tr>
                 <th>Name</th>
                 <th>Location</th>
+                <th />
             </tr>
         </thead>
         <tbody>
@@ -41,6 +42,18 @@ else
                 <tr>
                     <td>@shop.Name</td>
                     <td>@shop.Location</td>
+                    <td>
+                        <div>
+                            <a class="btn btn-primary me-2" role="button" href="@EditShopUrl(shop.Id)">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#@DeleteShop.GetModalId(shop)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        <DeleteShop Shop="@shop" />
+                    </td>
                 </tr>
             }
         </tbody>

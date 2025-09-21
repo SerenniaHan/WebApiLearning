@@ -4,6 +4,8 @@ namespace WebApiLearning.Blazor.Models;
 
 public record ShopDetails
 {
+    public Guid Id { get; set; }
+
     [Required(AllowEmptyStrings = false, ErrorMessage = "Name is required.")]
     public string Name { get; set; } = string.Empty;
 

@@ -7,7 +7,7 @@ namespace WebApiLearning.Blazor.Components.Pages.Shops;
 public partial class EditShop
 {
     [Parameter]
-    public Guid? Id { get; set; }
+    public Guid? ShopId { get; set; }
 
     [SupplyParameterFromForm]
     private ShopDetails? ShopDetails { get; set; }
@@ -21,9 +21,9 @@ public partial class EditShop
             return;
         }
 
-        if (Id is not null)
+        if (ShopId is not null)
         {
-            var shop = await ShopService.GetShopById(Id.Value);
+            var shop = await ShopService.GetShopById(ShopId.Value);
             if (shop is not null)
             {
                 ShopDetails = new ShopDetails { Name = shop.Name, Location = shop.Location };
@@ -40,9 +40,9 @@ public partial class EditShop
     private async Task HandleSubmitAsync()
     {
         ArgumentNullException.ThrowIfNull(ShopDetails);
-        if (Id is not null)
+        if (ShopId is not null)
         {
-            await ShopService.UpdateShop(Id.Value, ShopDetails);
+            await ShopService.UpdateShop(ShopId.Value, ShopDetails);
         }
         else
         {
