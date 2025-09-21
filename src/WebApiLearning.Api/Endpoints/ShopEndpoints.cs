@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApiLearning.Application.Shops.Commands.CreateShop;
+using WebApiLearning.Application.Shops.Commands.DeleteShop;
+using WebApiLearning.Application.Shops.Commands.UpdateShop;
 using WebApiLearning.Application.Shops.Queries.GetAllShops;
 using WebApiLearning.Application.Shops.Queries.GetShopById;
 using WebApiLearning.Application.Shops.Queries.GetShopInventories;
@@ -70,6 +72,26 @@ public static class ShopEndpoints
                         ),
                     Fail: error => Results.Problem(error.Message)
                 );
+            }
+        );
+
+        // update shop endpoint - from json body
+        group.MapPut(
+            "/{shopId:guid}",
+            async (Guid shopId, [FromBody] UpdateShopRequest request, ISender sender) =>
+            {
+                await sender.Send(request with { Id = shopId });
+                return Results.NoContent();
+            }
+        );
+
+        // delete shop endpoint
+        group.MapDelete(
+            "/{shopId:guid}",
+            async (Guid shopId, ISender sender) =>
+            {
+                await sender.Send(new DeleteShopRequest(shopId));
+                return Results.NoContent();
             }
         );
 

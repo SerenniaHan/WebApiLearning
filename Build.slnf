@@ -1,0 +1,12 @@
+{
+  "solution": {
+    "path": "WebApiLearning.sln",
+    "projects": [
+      "src\\WebApiLearning.Api\\WebApiLearning.Api.csproj",
+      "src\\WebApiLearning.Application\\WebApiLearning.Application.csproj",
+      "src\\WebApiLearning.Domain\\WebApiLearning.Domain.csproj",
+      "src\\WebApiLearning.Blazor\\WebApiLearning.Blazor.csproj",
+      "src\\WebApiLearning.Infrastructure.Mongo\\WebApiLearning.Infrastructure.Mongo.csproj"
+    ]
+  }
+}
