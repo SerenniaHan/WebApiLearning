@@ -1,7 +1,7 @@
 using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
-using WebApiLearning.Application.Shops.Dto;
+using WebApiLearning.Application.Shops.Dtos;
 using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Shops.Queries.GetById;

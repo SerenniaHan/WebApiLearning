@@ -1,6 +1,6 @@
 ﻿using WebApiLearning.Domain.Entities;
 
-namespace WebApiLearning.Application.Shops.Dto;
+namespace WebApiLearning.Application.Shops.Dtos;
 
 public static class Extensions
 {
