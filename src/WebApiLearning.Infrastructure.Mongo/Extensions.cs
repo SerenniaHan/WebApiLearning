@@ -19,7 +19,7 @@ public static class Extensions
         BsonSerializer.RegisterSerializer(
             new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String)
         );
-        BsonSerializer.RegisterSerializer<ERarity>(
+        BsonSerializer.RegisterSerializer(
             new EnumSerializer<ERarity>(MongoDB.Bson.BsonType.String)
         );
 
@@ -28,16 +28,16 @@ public static class Extensions
                 ?? throw new Exception("MongoDB connection string is not configured.")
         ));
 
-        services.AddSingleton(services =>
+        services.AddSingleton(serviceProvider =>
         {
-            var client = services.GetRequiredService<IMongoClient>();
+            var client = serviceProvider.GetRequiredService<IMongoClient>();
             return client.GetDatabase(
                 configuration["MongoDbSettings:DatabaseName"]
                     ?? throw new Exception("MongoDB database name is not configured.")
             );
         });
 
-        services.AddSingleton<IGameItemRepository<Weapon>, WeaponsRepository>();
+        services.AddSingleton<IWeaponRepository, WeaponsRepository>();
         services.AddSingleton<IShopRepository, ShopRepository>();
         services.AddSingleton<IInventoryRepository, InventoriesRepository>();
         return services;

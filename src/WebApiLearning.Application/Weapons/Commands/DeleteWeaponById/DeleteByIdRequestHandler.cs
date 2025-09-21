@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.DeleteWeaponById;
 
-internal class DeleteByIdRequestHandler(IGameItemRepository<Weapon> repository)
+internal class DeleteByIdRequestHandler(ICrudRepository<Weapon> repository)
     : IRequestHandler<DeleteByIdRequest, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(
@@ -15,7 +15,7 @@ internal class DeleteByIdRequestHandler(IGameItemRepository<Weapon> repository)
     {
         try
         {
-            await repository.DeleteGameObjectAsync(request.Id);
+            await repository.DeleteByIdAsync(request.Id);
             return new Result<Guid>(request.Id);
         }
         catch (Exception e)

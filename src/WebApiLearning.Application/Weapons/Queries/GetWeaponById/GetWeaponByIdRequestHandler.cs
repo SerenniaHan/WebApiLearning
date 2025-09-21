@@ -6,7 +6,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Queries.GetWeaponById;
 
-internal class GetWeaponByIdRequestHandler(IGameItemRepository<Weapon> repository)
+internal class GetWeaponByIdRequestHandler(ICrudRepository<Weapon> repository)
     : IRequestHandler<GetWeaponByIdRequest, Result<Option<Weapon>>>
 {
     public async Task<Result<Option<Weapon>>> Handle(
@@ -16,7 +16,7 @@ internal class GetWeaponByIdRequestHandler(IGameItemRepository<Weapon> repositor
     {
         try
         {
-            var result = await repository.GetGameObjectByIdAsync(request.Id);
+            var result = await repository.GetByIdAsync(request.Id);
             return new Result<Option<Weapon>>(Option<Weapon>.Some(result));
         }
         catch (Exception e)

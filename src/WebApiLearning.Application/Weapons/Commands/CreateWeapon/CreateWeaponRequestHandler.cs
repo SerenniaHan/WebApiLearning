@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.CreateWeapon;
 
-internal class CreateWeaponRequestHandler(IGameItemRepository<Weapon> repository)
+internal class CreateWeaponRequestHandler(ICrudRepository<Weapon> repository)
     : IRequestHandler<CreateWeaponRequest, Result<Weapon>>
 {
     public async Task<Result<Weapon>> Handle(
@@ -23,7 +23,7 @@ internal class CreateWeaponRequestHandler(IGameItemRepository<Weapon> repository
                 request.Damage,
                 request.AttackSpeed
             );
-            await repository.CreateGameObjectAsync(weapon);
+            await repository.CreateAsync(weapon);
 
             return new Result<Weapon>(weapon);
         }

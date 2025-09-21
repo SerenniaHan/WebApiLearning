@@ -16,32 +16,33 @@ public class ShopRepository : IShopRepository
         _collection = database.GetCollection<Shop>(_collectionName);
     }
 
-    public async Task<Shop> GetByIdAsync(Guid id)
+    public async Task<Shop> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _collection.Find(_filterBuilder.Eq(shop => shop.Id, id)).FirstOrDefaultAsync();
+        return await _collection.Find(_filterBuilder.Eq(shop => shop.Id, id)).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<Shop>> GetShopsAsync()
+    public async Task<IReadOnlyCollection<Shop>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var shops = await _collection.Find(new BsonDocument()).ToListAsync();
+        var shops = await _collection.Find(new BsonDocument()).ToListAsync(cancellationToken);
         return shops;
     }
 
-    public async Task CreateShopAsync(Shop shop)
+    public async Task CreateAsync(Shop shop, CancellationToken cancellationToken = default)
     {
-        await _collection.InsertOneAsync(shop);
+        await _collection.InsertOneAsync(shop, cancellationToken: cancellationToken);
     }
 
-    public async Task UpdateShopAsync(Shop shop)
+    public async Task UpdateAsync(Shop shop, CancellationToken cancellationToken = default)
     {
         await _collection.ReplaceOneAsync(
             _filterBuilder.Eq(existingShop => existingShop.Id, shop.Id),
-            shop
+            shop,
+            cancellationToken: cancellationToken
         );
     }
 
-    public async Task DeleteByIdAsync(Guid id)
+    public async Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await _collection.DeleteOneAsync(_filterBuilder.Eq(shop => shop.Id, id));
+        await _collection.DeleteOneAsync(_filterBuilder.Eq(shop => shop.Id, id), cancellationToken);
     }
 }

@@ -4,7 +4,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.UpdateWeapon;
 
-internal class UpdateRequestHandler(IGameItemRepository<Weapon> repository)
+internal class UpdateRequestHandler(ICrudRepository<Weapon> repository)
     : IRequestHandler<UpdateCommand>
 {
     public async Task Handle(UpdateCommand request, CancellationToken cancellationToken)
@@ -21,6 +21,6 @@ internal class UpdateRequestHandler(IGameItemRepository<Weapon> repository)
             Id = request.Id,
         };
 
-        await repository.UpdateGameObjectAsync(weapon);
+        await repository.UpdateAsync(weapon);
     }
 }

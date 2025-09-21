@@ -15,7 +15,7 @@ internal class GetAllShopsRequestHandler(IShopRepository repository)
     {
         try
         {
-            var shops = await repository.GetShopsAsync();
+            var shops = await repository.GetAllAsync();
             return new Result<IReadOnlyCollection<Shop>>(shops);
         }
         catch (Exception e)

@@ -11,6 +11,6 @@ internal class UpdateShopRequestHandler(IShopRepository repository)
     {
         var shop = new Shop(request.Name, request.Location) with { Id = request.Id };
 
-        await repository.UpdateShopAsync(shop);
+        await repository.UpdateAsync(shop);
     }
 }

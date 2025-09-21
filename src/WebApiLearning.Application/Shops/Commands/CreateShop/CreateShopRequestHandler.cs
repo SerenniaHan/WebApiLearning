@@ -16,7 +16,7 @@ internal class CreateShopRequestHandler(IShopRepository repository)
         try
         {
             var shop = new Shop(request.Name, request.Location);
-            await repository.CreateShopAsync(shop);
+            await repository.CreateAsync(shop);
 
             return new Result<Shop>(shop);
         }
