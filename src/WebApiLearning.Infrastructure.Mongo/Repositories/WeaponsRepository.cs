@@ -16,9 +16,9 @@ public class WeaponsRepository : IWeaponRepository
         _weapons = database.GetCollection<Weapon>(_collectionName);
     }
 
-    public async Task CreateAsync(Weapon item, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(Weapon entity, CancellationToken cancellationToken = default)
     {
-        await _weapons.InsertOneAsync(item, cancellationToken: cancellationToken);
+        await _weapons.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
     public async Task<Weapon> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -38,11 +38,11 @@ public class WeaponsRepository : IWeaponRepository
         await _weapons.DeleteOneAsync(_filterBuilder.Eq(weapon => weapon.Id, id), cancellationToken);
     }
 
-    public async Task UpdateAsync(Weapon item, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Weapon entity, CancellationToken cancellationToken = default)
     {
         await _weapons.ReplaceOneAsync(
-            _filterBuilder.Eq(existingWeapon => existingWeapon.Id, item.Id),
-            item,
+            _filterBuilder.Eq(existingWeapon => existingWeapon.Id, entity.Id),
+            entity,
             cancellationToken: cancellationToken
         );
     }

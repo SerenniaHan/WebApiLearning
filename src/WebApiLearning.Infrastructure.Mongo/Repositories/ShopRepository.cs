@@ -27,16 +27,16 @@ public class ShopRepository : IShopRepository
         return shops;
     }
 
-    public async Task CreateAsync(Shop shop, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(Shop entity, CancellationToken cancellationToken = default)
     {
-        await _collection.InsertOneAsync(shop, cancellationToken: cancellationToken);
+        await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
-    public async Task UpdateAsync(Shop shop, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Shop entity, CancellationToken cancellationToken = default)
     {
         await _collection.ReplaceOneAsync(
-            _filterBuilder.Eq(existingShop => existingShop.Id, shop.Id),
-            shop,
+            _filterBuilder.Eq(existingShop => existingShop.Id, entity.Id),
+            entity,
             cancellationToken: cancellationToken
         );
     }

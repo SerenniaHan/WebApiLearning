@@ -21,9 +21,9 @@ public class InventoriesRepository : IInventoryRepository
         return await _collection.Find(_filterBuilder.Eq(i => i.ShopId, shopId)).ToListAsync(cancellationToken);
     }
 
-    public async Task CreateAsync(Inventory item, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(Inventory entity, CancellationToken cancellationToken = default)
     {
-        await _collection.InsertOneAsync(item, cancellationToken: cancellationToken);
+        await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
     public async Task<Inventory> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -41,8 +41,8 @@ public class InventoriesRepository : IInventoryRepository
         await _collection.DeleteOneAsync(_filterBuilder.Eq(i => i.Id, id), cancellationToken);
     }
 
-    public async Task UpdateAsync(Inventory item,CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Inventory entity, CancellationToken cancellationToken = default)
     {
-        await _collection.ReplaceOneAsync(_filterBuilder.Eq(i => i.Id, item.Id), item, cancellationToken: cancellationToken);
+        await _collection.ReplaceOneAsync(_filterBuilder.Eq(i => i.Id, entity.Id), entity, cancellationToken: cancellationToken);
     }
 }
