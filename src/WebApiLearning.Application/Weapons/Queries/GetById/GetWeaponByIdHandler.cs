@@ -17,20 +17,8 @@ internal class GetWeaponByIdHandler(ICrudRepository<Weapon> repository)
     {
         try
         {
-            var result = await repository.GetByIdAsync(query.Id, cancellationToken);
-            return new Result<Option<WeaponDto>>(
-                Option<WeaponDto>.Some(
-                    new WeaponDto(
-                        result.Id,
-                        result.Name,
-                        result.Rarity,
-                        result.PurchasePrice,
-                        result.SellPrice,
-                        result.Damage,
-                        result.AttackSpeed
-                    )
-                )
-            );
+            var response = await repository.GetByIdAsync(query.Id, cancellationToken);
+            return new Result<Option<WeaponDto>>(Option<WeaponDto>.Some(response.ToDto()));
         }
         catch (Exception e)
         {

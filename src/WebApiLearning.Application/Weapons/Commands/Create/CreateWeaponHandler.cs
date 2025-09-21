@@ -26,17 +26,7 @@ internal class CreateWeaponHandler(ICrudRepository<Weapon> repository)
             );
             await repository.CreateAsync(weapon, cancellationToken);
 
-            return new Result<WeaponDto>(
-                new WeaponDto(
-                    weapon.Id,
-                    weapon.Name,
-                    weapon.Rarity,
-                    weapon.PurchasePrice,
-                    weapon.SellPrice,
-                    weapon.Damage,
-                    weapon.AttackSpeed
-                )
-            );
+            return new Result<WeaponDto>(weapon.ToDto());
         }
         catch (Exception e)
         {

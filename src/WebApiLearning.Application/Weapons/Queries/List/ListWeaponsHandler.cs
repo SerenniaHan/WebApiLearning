@@ -16,18 +16,11 @@ internal class ListWeaponsHandler(ICrudRepository<Weapon> repository)
     {
         try
         {
-            var weapons = (await repository.GetAllAsync(cancellationToken))
-                .Select(x => new WeaponDto(
-                    x.Id,
-                    x.Name,
-                    x.Rarity,
-                    x.PurchasePrice,
-                    x.SellPrice,
-                    x.Damage,
-                    x.AttackSpeed
-                ))
-                .ToArray();
-            return new Result<IReadOnlyCollection<WeaponDto>>(weapons);
+            var response = await repository.GetAllAsync(cancellationToken);
+
+            return new Result<IReadOnlyCollection<WeaponDto>>(
+                response.Select(x => x.ToDto()).ToArray()
+            );
         }
         catch (Exception e)
         {
