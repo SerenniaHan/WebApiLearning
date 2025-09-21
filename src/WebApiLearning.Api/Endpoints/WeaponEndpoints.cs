@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApiLearning.Application.Weapons.Commands.CreateWeapon;
-using WebApiLearning.Application.Weapons.Commands.DeleteWeaponById;
-using WebApiLearning.Application.Weapons.Commands.UpdateWeapon;
-using WebApiLearning.Application.Weapons.Queries.GetAllWeapon;
-using WebApiLearning.Application.Weapons.Queries.GetWeaponById;
+using WebApiLearning.Application.Weapons.Commands.Create;
+using WebApiLearning.Application.Weapons.Commands.Delete;
+using WebApiLearning.Application.Weapons.Commands.Update;
+using WebApiLearning.Application.Weapons.Queries.GetById;
+using WebApiLearning.Application.Weapons.Queries.List;
 using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Api.Endpoints;
@@ -15,12 +15,12 @@ public static class WeaponEndpoints
     {
         var group = builder.MapGroup("/api/weapons");
 
-        // create new weapon item endpoint - from json body
+        // create new weapon item endpoint - from JSON body
         group.MapPost(
             "/",
-            async ([FromBody] CreateWeaponRequest request, ISender sender) =>
+            async ([FromBody] CreateWeaponCommand weaponCommand, ISender sender) =>
             {
-                var response = await sender.Send(request);
+                var response = await sender.Send(weaponCommand);
                 return response.Match(
                     Succ: weapon => Results.Created($"/api/weapons/{weapon.Id}", weapon),
                     Fail: error => Results.Problem(error.Message)
@@ -45,7 +45,7 @@ public static class WeaponEndpoints
                 {
                     return Results.BadRequest($"Invalid rarity value: {rarity}");
                 }
-                var request = new CreateWeaponRequest(
+                var request = new CreateWeaponCommand(
                     name,
                     parsedRarity,
                     purchasePrice,
@@ -66,10 +66,10 @@ public static class WeaponEndpoints
             "/",
             async (ISender sender) =>
             {
-                var result = await sender.Send(new GetAllWeaponRequest());
+                var result = await sender.Send(new ListWeaponsQuery());
                 return result.Match(
-                    Some: weapons => Results.Ok(weapons),
-                    None: () => Results.Problem("Could not retrieve weapons")
+                    Succ: Results.Ok,
+                    Fail: error => Results.Problem(error.Message)
                 );
             }
         );
@@ -79,13 +79,9 @@ public static class WeaponEndpoints
             "/{id:guid}",
             async (Guid id, ISender sender) =>
             {
-                var result = await sender.Send(new GetWeaponByIdRequest(id));
+                var result = await sender.Send(new GetWeaponByIdQuery(id));
                 return result.Match(
-                    Succ: option =>
-                        option.Match(
-                            Some: weapon => Results.Ok(weapon),
-                            None: () => Results.NotFound()
-                        ),
+                    Succ: option => option.Match(Some: Results.Ok, None: () => Results.NotFound()),
                     Fail: error => Results.Problem(error.Message)
                 );
             }
@@ -96,29 +92,21 @@ public static class WeaponEndpoints
             "/{id:guid}",
             async (Guid id, ISender sender) =>
             {
-                var result = await sender.Send(new DeleteByIdRequest(id));
-                return result.Match(
-                    Succ: _ => Results.NoContent(),
-                    Fail: error => Results.Problem(error.Message)
-                );
+                await sender.Send(new DeleteWeaponCommand(id));
+                return Results.NoContent();
             }
         );
 
-        // update weapon item by id endpoint - from json body
+        // update weapon item by id endpoint - from JSON body
         group.MapPut(
             "/{id:guid}",
-            async (Guid id, [FromBody] UpdateRequest request, ISender sender) =>
+            async (Guid id, [FromBody] UpdateWeaponCommand command, ISender sender) =>
             {
-                var updateRequest = new UpdateCommand(
-                    id,
-                    request.Name,
-                    request.Rarity,
-                    request.PurchasePrice,
-                    request.SellPrice,
-                    request.Damage,
-                    request.AttackSpeed
-                );
-                await sender.Send(updateRequest);
+                if (id != command.Id)
+                {
+                    return Results.BadRequest("ID in URL does not match ID in body");
+                }
+                await sender.Send(command);
                 return Results.NoContent();
             }
         );
