@@ -1,7 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WebApiLearning.Blazor.Models;
 
 public record ShopDetails
 {
-    public string Name { get; init; } = string.Empty;
-    public string Location { get; init; } = string.Empty;
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Name is required.")]
+    public string Name { get; set; } = string.Empty;
+
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Location is required.")]
+    public string Location { get; set; } = string.Empty;
 }
