@@ -20,7 +20,7 @@ internal class CreateInventoryRequestHandler(IInventoryRepository repository)
                 ItemId: request.ItemId,
                 Quantity: request.Quantity
             );
-            await repository.CreateInventoryAsync(inventory);
+            await repository.CreateAsync(inventory);
             return new Result<Inventory>(inventory);
         }
         catch (Exception e)

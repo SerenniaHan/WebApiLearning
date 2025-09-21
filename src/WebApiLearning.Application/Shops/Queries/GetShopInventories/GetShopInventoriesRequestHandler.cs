@@ -8,7 +8,7 @@ namespace WebApiLearning.Application.Shops.Queries.GetShopInventories;
 
 public class GetShopInventoriesRequestHandler(
     IInventoryRepository inventoryRepository,
-    IGameItemRepository<Weapon> gameItemRepository
+    ICrudRepository<Weapon> crudRepository
 )
     : IRequestHandler<
         GetShopInventoriesRequest,
@@ -32,7 +32,7 @@ public class GetShopInventoriesRequestHandler(
             var response = inventories
                 .Select(async inventory =>
                 {
-                    var item = await gameItemRepository.GetGameObjectByIdAsync(inventory.ItemId);
+                    var item = await crudRepository.GetByIdAsync(inventory.ItemId);
                     return Option<GetShopInventoriesResponse>.Some(
                         new GetShopInventoriesResponse(inventory.Id, item.Name, inventory.Quantity)
                     );

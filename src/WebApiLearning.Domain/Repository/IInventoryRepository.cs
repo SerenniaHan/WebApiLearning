@@ -2,10 +2,10 @@ using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Domain.Repository;
 
-public interface IInventoryRepository
+public interface IInventoryRepository : ICrudRepository<Inventory>
 {
-    Task CreateInventoryAsync(Inventory inventory);
-    Task<IReadOnlyCollection<Inventory>> GetAllInventoriesAsync();
-    Task<Inventory?> GetByInventoryIdAsync(Guid id);
-    Task<IReadOnlyCollection<Inventory>> GetInventoriesByShopIdAsync(Guid shopId);
+    Task<IReadOnlyCollection<Inventory>> GetInventoriesByShopIdAsync(
+        Guid shopId,
+        CancellationToken cancellationToken = default
+    );
 }
