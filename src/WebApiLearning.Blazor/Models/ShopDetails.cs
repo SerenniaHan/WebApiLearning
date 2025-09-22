@@ -11,6 +11,4 @@ public record ShopDetails
 
     [Required(AllowEmptyStrings = false, ErrorMessage = "Location is required.")]
     public string Location { get; set; } = string.Empty;
-
-    public IReadOnlyCollection<ShopInventory> Inventories { get; set; } = [];
 }

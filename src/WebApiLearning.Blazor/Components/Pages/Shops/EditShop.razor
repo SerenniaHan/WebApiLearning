@@ -4,12 +4,13 @@
 @attribute [StreamRendering]
 @inject NavigationManager Navigation
 @inject ShopService ShopService
+@inject WeaponService WeaponService
 
 <PageTitle>Edit Shop</PageTitle>
 
 <h1>@_title</h1>
 
-@if (ShopDetails is null)
+@if (ShopDetails is null || ShopInventories is null)
 {
     <button class="btn btn-primary" type="button" disabled>
         <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -30,7 +31,23 @@ else
             <InputText class="form-control" id="shopLocation" @bind-Value="ShopDetails.Location" />
             <ValidationMessage For="() => ShopDetails.Location" />
         </div>
-
+        <div class="mb-3">
+            <label for="inventoryItem" class="form-label">Inventories:</label>
+            <div class="vstack gap-1">
+                <ul class="list-group">
+                    @foreach (var inventory in ShopInventories)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @inventory.ItemName
+                            <span class="badge text-bg-primary rounded-pill">@inventory.Quantity</span>
+                        </li>
+                    }
+                </ul>
+                <button class="btn btn-secondary mt-3" type="button">
+                    Goto Inventory Page
+                </button>
+            </div>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <a role="button" class="btn btn-secondary" href="/shops">Cancel</a>
     </EditForm>

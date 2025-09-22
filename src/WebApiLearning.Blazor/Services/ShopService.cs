@@ -46,4 +46,11 @@ public class ShopService
         var response = _httpClient.DeleteAsync($"api/shops/{id}");
         return response.ContinueWith(t => t.Result.EnsureSuccessStatusCode());
     }
+
+    public Task<List<ShopInventory>?> GetShopInventories(Guid shopId)
+    {
+        return _httpClient.GetFromJsonAsync<List<ShopInventory>?>(
+            $"api/shops/{shopId}/inventories"
+        );
+    }
 }
