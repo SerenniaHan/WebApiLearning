@@ -8,6 +8,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<WeaponService>();
 builder.Services.AddSingleton<ShopService>();
+builder.Services.AddSingleton<InventoryService>();
 
 var app = builder.Build();
 
