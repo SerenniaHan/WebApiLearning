@@ -16,9 +16,14 @@ public class InventoriesRepository : IInventoryRepository
         _collection = mongoDatabase.GetCollection<Inventory>(_collectionName);
     }
 
-    public async Task<IReadOnlyCollection<Inventory>> GetInventoriesByShopIdAsync(Guid shopId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Inventory>> GetInventoriesByShopIdAsync(
+        Guid shopId,
+        CancellationToken cancellationToken = default
+    )
     {
-        return await _collection.Find(_filterBuilder.Eq(i => i.ShopId, shopId)).ToListAsync(cancellationToken);
+        return await _collection
+            .Find(_filterBuilder.Eq(i => i.ShopId, shopId))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task CreateAsync(Inventory entity, CancellationToken cancellationToken = default)
@@ -26,23 +31,38 @@ public class InventoriesRepository : IInventoryRepository
         await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
-    public async Task<Inventory> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Inventory> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
     {
-        return await _collection.Find(_filterBuilder.Eq(i => i.Id, id)).FirstOrDefaultAsync(cancellationToken);
+        return await _collection
+            .Find(_filterBuilder.Eq(i => i.Id, id))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<Inventory>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Inventory>> GetAllAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         return await _collection.Find(new BsonDocument()).ToListAsync(cancellationToken);
     }
 
-    public async Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await _collection.DeleteOneAsync(_filterBuilder.Eq(i => i.Id, id), cancellationToken);
+        var result = await _collection.DeleteOneAsync(
+            _filterBuilder.Eq(i => i.Id, id),
+            cancellationToken
+        );
+        return result.DeletedCount > 0;
     }
 
     public async Task UpdateAsync(Inventory entity, CancellationToken cancellationToken = default)
     {
-        await _collection.ReplaceOneAsync(_filterBuilder.Eq(i => i.Id, entity.Id), entity, cancellationToken: cancellationToken);
+        await _collection.ReplaceOneAsync(
+            _filterBuilder.Eq(i => i.Id, entity.Id),
+            entity,
+            cancellationToken: cancellationToken
+        );
     }
 }
