@@ -1,5 +1,4 @@
 using WebApiLearning.Blazor.Models;
-using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Services;
 
@@ -20,20 +19,20 @@ public class WeaponService
         };
     }
 
-    public Task<List<Weapon>?> AllWeapons()
+    public Task<List<WeaponDetails>?> AllWeapons()
     {
-        return _httpClient.GetFromJsonAsync<List<Weapon>>("api/weapons");
+        return _httpClient.GetFromJsonAsync<List<WeaponDetails>>("api/weapons");
     }
 
-    public Task<bool> AddNewWeapon(Weapon weapon)
+    public Task<bool> AddNewWeapon(WeaponDetails weapon)
     {
         var response = _httpClient.PostAsJsonAsync("api/weapons", weapon);
         return response.ContinueWith(t => t.Result.IsSuccessStatusCode);
     }
 
-    public Task<Weapon?> GetWeaponById(Guid id)
+    public Task<WeaponDetails?> GetWeaponById(Guid id)
     {
-        return _httpClient.GetFromJsonAsync<Weapon?>($"api/weapons/{id}");
+        return _httpClient.GetFromJsonAsync<WeaponDetails?>($"api/weapons/{id}");
     }
 
     public Task UpdateWeapon(Guid id, WeaponDetails weaponDetails)

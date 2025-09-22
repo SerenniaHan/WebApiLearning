@@ -71,16 +71,12 @@ public static class ShopEndpoints
 
         // get shop's inventory endpoint - from json body
         group.MapGet(
-            "/{shopId:guid}/inventory",
+            "/{shopId:guid}/inventories",
             async (Guid shopId, ISender sender) =>
             {
-                var response = await sender.Send(new GetShopInventoriesRequest(shopId));
+                var response = await sender.Send(new GetShopInventoriesQuery(shopId));
                 return response.Match(
-                    Succ: option =>
-                        option.Match(
-                            Some: inventories => Results.Ok(inventories),
-                            None: () => Results.NotFound()
-                        ),
+                    Succ: inventories => Results.Ok(inventories),
                     Fail: error => Results.Problem(error.Message)
                 );
             }

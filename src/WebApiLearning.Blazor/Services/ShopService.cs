@@ -1,5 +1,4 @@
 using WebApiLearning.Blazor.Models;
-using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Services;
 
@@ -20,20 +19,20 @@ public class ShopService
         };
     }
 
-    public Task<List<Shop>?> AllShops()
+    public Task<List<ShopDetails>?> AllShops()
     {
-        return _httpClient.GetFromJsonAsync<List<Shop>>("api/shops");
+        return _httpClient.GetFromJsonAsync<List<ShopDetails>>("api/shops");
     }
 
-    public Task<bool> AddNewShop(Shop shop)
+    public Task<bool> AddNewShop(ShopDetails shop)
     {
         var response = _httpClient.PostAsJsonAsync("api/shops", shop);
         return response.ContinueWith(t => t.Result.IsSuccessStatusCode);
     }
 
-    public Task<Shop?> GetShopById(Guid id)
+    public Task<ShopDetails?> GetShopById(Guid id)
     {
-        return _httpClient.GetFromJsonAsync<Shop?>($"api/shops/{id}");
+        return _httpClient.GetFromJsonAsync<ShopDetails?>($"api/shops/{id}");
     }
 
     public Task UpdateShop(Guid id, ShopDetails shopDetails)

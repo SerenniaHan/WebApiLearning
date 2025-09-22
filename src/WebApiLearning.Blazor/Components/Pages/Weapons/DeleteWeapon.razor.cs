@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
-using WebApiLearning.Domain.Entities;
+using WebApiLearning.Blazor.Models;
 
 namespace WebApiLearning.Blazor.Components.Pages.Weapons;
 
 public partial class DeleteWeapon
 {
     [Parameter]
-    public Weapon? Weapon { get; set; }
+    public WeaponDetails? Weapon { get; set; }
 
     private string _title = string.Empty;
 
@@ -16,7 +16,7 @@ public partial class DeleteWeapon
         return base.OnParametersSetAsync();
     }
 
-    public static string GetModalId(Weapon? weapon)
+    public static string GetModalId(WeaponDetails? weapon)
     {
         ArgumentNullException.ThrowIfNull(weapon);
         return $"deleteWeaponModal{weapon.Id.ToString().Replace("-", string.Empty)}";

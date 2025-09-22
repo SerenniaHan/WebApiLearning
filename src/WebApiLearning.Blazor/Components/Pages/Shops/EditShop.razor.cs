@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using WebApiLearning.Blazor.Models;
-using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Components.Pages.Shops;
 
@@ -47,7 +46,7 @@ public partial class EditShop
         else
         {
             await ShopService.AddNewShop(
-                new Shop(Name: ShopDetails.Name, Location: ShopDetails.Location)
+                new ShopDetails { Name = ShopDetails.Name, Location = ShopDetails.Location }
             );
         }
         Navigation.NavigateTo("/shops");

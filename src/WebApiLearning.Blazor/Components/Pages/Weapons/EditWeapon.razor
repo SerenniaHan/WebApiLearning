@@ -26,7 +26,7 @@ else
         <div class="mb-3">
             <label for="weaponRarity" class="form-label">Rarity:</label>
             <InputSelect class="form-select" id="weaponRarity" @bind-Value="WeaponDetails.Rarity">
-                @foreach (var rarity in Enum.GetValues<ERarity>())
+                @foreach (var rarity in Enum.GetValues<EItemRarity>())
                 {
                     <option value="@rarity">@rarity</option>
                 }
