@@ -8,7 +8,7 @@ namespace WebApiLearning.Application.Shops.Queries.GetShopInventories;
 
 public class GetShopInventoriesRequestHandler(
     IInventoryRepository inventoryRepository,
-    ICrudRepository<Weapon> crudRepository
+    IWeaponRepository crudRepository
 )
     : IRequestHandler<
         GetShopInventoriesRequest,
