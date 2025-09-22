@@ -4,6 +4,7 @@ using WebApiLearning.Application.Shops.Commands.Create;
 using WebApiLearning.Application.Shops.Commands.Delete;
 using WebApiLearning.Application.Shops.Commands.Update;
 using WebApiLearning.Application.Shops.Queries.GetById;
+using WebApiLearning.Application.Shops.Queries.GetByName;
 using WebApiLearning.Application.Shops.Queries.GetShopInventories;
 using WebApiLearning.Application.Shops.Queries.List;
 
@@ -55,6 +56,16 @@ public static class ShopEndpoints
                         ),
                     Fail: error => Results.Problem(error.Message)
                 );
+            }
+        );
+
+        // get shop by name endpoint - from route parameter
+        group.MapGet(
+            "/by-name/{name}",
+            async (string name, ISender sender) =>
+            {
+                var response = await sender.Send(new GetShopByNameQuery(name));
+                return response.Match(Some: Results.Ok, None: () => Results.NotFound());
             }
         );
 
