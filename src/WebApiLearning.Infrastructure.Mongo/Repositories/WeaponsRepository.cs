@@ -28,14 +28,20 @@ public class WeaponsRepository : IWeaponRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<Weapon>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Weapon>> GetAllAsync(
+        CancellationToken cancellationToken = default
+    )
     {
-         return await _weapons.Find(new BsonDocument()).ToListAsync(cancellationToken);
+        return await _weapons.Find(new BsonDocument()).ToListAsync(cancellationToken);
     }
 
-    public async Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await _weapons.DeleteOneAsync(_filterBuilder.Eq(weapon => weapon.Id, id), cancellationToken);
+        var result = await _weapons.DeleteOneAsync(
+            _filterBuilder.Eq(weapon => weapon.Id, id),
+            cancellationToken
+        );
+        return result.DeletedCount > 0;
     }
 
     public async Task UpdateAsync(Weapon entity, CancellationToken cancellationToken = default)
@@ -45,5 +51,12 @@ public class WeaponsRepository : IWeaponRepository
             entity,
             cancellationToken: cancellationToken
         );
+    }
+
+    public async Task<Weapon?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await _weapons
+            .Find(_filterBuilder.Eq(weapon => weapon.Name, name))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

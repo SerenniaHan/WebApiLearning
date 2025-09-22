@@ -4,6 +4,7 @@ using WebApiLearning.Application.Weapons.Commands.Create;
 using WebApiLearning.Application.Weapons.Commands.Delete;
 using WebApiLearning.Application.Weapons.Commands.Update;
 using WebApiLearning.Application.Weapons.Queries.GetById;
+using WebApiLearning.Application.Weapons.Queries.GetByName;
 using WebApiLearning.Application.Weapons.Queries.List;
 using WebApiLearning.Domain.Entities;
 
@@ -84,6 +85,16 @@ public static class WeaponEndpoints
                     Succ: option => option.Match(Some: Results.Ok, None: () => Results.NotFound()),
                     Fail: error => Results.Problem(error.Message)
                 );
+            }
+        );
+
+        // get weapon item by name endpoint
+        group.MapGet(
+            "/{name}",
+            async (string name, ISender sender) =>
+            {
+                var result = await sender.Send(new GetWeaponByNameQuery(name));
+                return result.Match(Some: Results.Ok, None: () => Results.NotFound());
             }
         );
 
