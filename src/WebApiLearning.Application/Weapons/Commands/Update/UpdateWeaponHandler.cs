@@ -6,7 +6,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.Update;
 
-internal class UpdateWeaponHandler(ICrudRepository<Weapon> repository)
+internal class UpdateWeaponHandler(IWeaponRepository repository)
     : IRequestHandler<UpdateWeaponCommand, Result<WeaponDto>>
 {
     public async Task<Result<WeaponDto>> Handle(

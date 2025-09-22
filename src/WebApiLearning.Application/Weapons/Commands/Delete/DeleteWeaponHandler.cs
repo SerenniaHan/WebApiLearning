@@ -1,10 +1,9 @@
 using MediatR;
-using WebApiLearning.Domain.Entities;
 using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.Delete;
 
-internal class DeleteWeaponHandler(ICrudRepository<Weapon> repository)
+internal class DeleteWeaponHandler(IWeaponRepository repository)
     : IRequestHandler<DeleteWeaponCommand>
 {
     public async Task Handle(DeleteWeaponCommand command, CancellationToken cancellationToken)

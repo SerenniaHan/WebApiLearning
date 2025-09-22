@@ -6,7 +6,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Commands.Create;
 
-internal class CreateWeaponHandler(ICrudRepository<Weapon> repository)
+internal class CreateWeaponHandler(IWeaponRepository repository)
     : IRequestHandler<CreateWeaponCommand, Result<WeaponDto>>
 {
     public async Task<Result<WeaponDto>> Handle(
