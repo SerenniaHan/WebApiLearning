@@ -6,9 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<WeaponService>();
-builder.Services.AddSingleton<ShopService>();
-builder.Services.AddSingleton<InventoryService>();
+builder.Services.AddShopService();
+builder.Services.AddInventoryService();
+builder.Services.AddWeaponService();
 
 var app = builder.Build();
 
