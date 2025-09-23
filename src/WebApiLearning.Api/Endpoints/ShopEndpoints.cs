@@ -4,6 +4,7 @@ using WebApiLearning.Application.Shops.Commands.Create;
 using WebApiLearning.Application.Shops.Commands.Delete;
 using WebApiLearning.Application.Shops.Commands.Update;
 using WebApiLearning.Application.Shops.Queries.GetById;
+using WebApiLearning.Application.Shops.Queries.GetByName;
 using WebApiLearning.Application.Shops.Queries.GetShopInventories;
 using WebApiLearning.Application.Shops.Queries.List;
 
@@ -58,18 +59,24 @@ public static class ShopEndpoints
             }
         );
 
+        // get shop by name endpoint - from route parameter
+        group.MapGet(
+            "/by-name/{name}",
+            async (string name, ISender sender) =>
+            {
+                var response = await sender.Send(new GetShopByNameQuery(name));
+                return response.Match(Some: Results.Ok, None: () => Results.NotFound());
+            }
+        );
+
         // get shop's inventory endpoint - from json body
         group.MapGet(
-            "/{shopId:guid}/inventory",
+            "/{shopId:guid}/inventories",
             async (Guid shopId, ISender sender) =>
             {
-                var response = await sender.Send(new GetShopInventoriesRequest(shopId));
+                var response = await sender.Send(new GetShopInventoriesQuery(shopId));
                 return response.Match(
-                    Succ: option =>
-                        option.Match(
-                            Some: inventories => Results.Ok(inventories),
-                            None: () => Results.NotFound()
-                        ),
+                    Succ: inventories => Results.Ok(inventories),
                     Fail: error => Results.Problem(error.Message)
                 );
             }

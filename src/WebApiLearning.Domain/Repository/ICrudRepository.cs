@@ -8,6 +8,6 @@ public interface ICrudRepository<T>
     Task CreateAsync(T entity, CancellationToken cancellationToken = default);
     Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<IReadOnlyCollection<T>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
 }

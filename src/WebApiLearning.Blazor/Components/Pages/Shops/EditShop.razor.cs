@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using WebApiLearning.Blazor.Models;
-using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Components.Pages.Shops;
 
@@ -11,6 +10,8 @@ public partial class EditShop
 
     [SupplyParameterFromForm]
     private ShopDetails? ShopDetails { get; set; }
+
+    private List<ShopInventory>? ShopInventories { get; set; } = [];
 
     private string _title = string.Empty;
 
@@ -23,18 +24,18 @@ public partial class EditShop
 
         if (ShopId is not null)
         {
-            var shop = await ShopService.GetShopById(ShopId.Value);
-            if (shop is not null)
+            ShopDetails = await ShopService.GetShopById(ShopId.Value);
+            if (ShopDetails is not null)
             {
-                ShopDetails = new ShopDetails { Name = shop.Name, Location = shop.Location };
-                _title = $"Edit {ShopDetails.Name}";
+                ShopInventories = await ShopService.GetShopInventories(ShopId.Value);
             }
         }
         else
         {
             ShopDetails = new ShopDetails();
-            _title = "New Shop";
+            ShopInventories = [];
         }
+        _title = ShopId is not null ? $"Edit Shop - {ShopDetails!.Name}" : "New Shop";
     }
 
     private async Task HandleSubmitAsync()
@@ -47,7 +48,7 @@ public partial class EditShop
         else
         {
             await ShopService.AddNewShop(
-                new Shop(Name: ShopDetails.Name, Location: ShopDetails.Location)
+                new ShopDetails { Name = ShopDetails.Name, Location = ShopDetails.Location }
             );
         }
         Navigation.NavigateTo("/shops");

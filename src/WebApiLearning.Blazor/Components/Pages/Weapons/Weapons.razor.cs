@@ -1,10 +1,10 @@
-using WebApiLearning.Domain.Entities;
+using WebApiLearning.Blazor.Models;
 
 namespace WebApiLearning.Blazor.Components.Pages.Weapons;
 
 public partial class Weapons
 {
-    private List<Weapon>? weapons;
+    private List<WeaponDetails>? weapons;
 
     protected override async Task OnInitializedAsync()
     {

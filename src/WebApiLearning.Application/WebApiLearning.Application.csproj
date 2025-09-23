@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -10,9 +10,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebApiLearning.Domain\WebApiLearning.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Inventories\Dtos\" />
-    <Folder Include="Inventories\Queries\" />
   </ItemGroup>
 </Project>

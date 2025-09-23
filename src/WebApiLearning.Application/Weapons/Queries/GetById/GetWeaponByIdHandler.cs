@@ -2,12 +2,11 @@ using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
 using WebApiLearning.Application.Weapons.Dtos;
-using WebApiLearning.Domain.Entities;
 using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Queries.GetById;
 
-internal class GetWeaponByIdHandler(ICrudRepository<Weapon> repository)
+internal class GetWeaponByIdHandler(IWeaponRepository repository)
     : IRequestHandler<GetWeaponByIdQuery, Result<Option<WeaponDto>>>
 {
     public async Task<Result<Option<WeaponDto>>> Handle(

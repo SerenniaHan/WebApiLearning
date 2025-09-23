@@ -1,12 +1,11 @@
 ﻿using LanguageExt.Common;
 using MediatR;
 using WebApiLearning.Application.Weapons.Dtos;
-using WebApiLearning.Domain.Entities;
 using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Application.Weapons.Queries.List;
 
-internal class ListWeaponsHandler(ICrudRepository<Weapon> repository)
+internal class ListWeaponsHandler(IWeaponRepository repository)
     : IRequestHandler<ListWeaponsQuery, Result<IReadOnlyCollection<WeaponDto>>>
 {
     public async Task<Result<IReadOnlyCollection<WeaponDto>>> Handle(
