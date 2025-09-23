@@ -1,0 +1,38 @@
+@page "/inventories"
+
+@attribute [StreamRendering]
+@inject InventoryService InventoryService
+
+<PageTitle>Inventories</PageTitle>
+
+<h1>Inventories</h1>
+
+@if (inventories == null)
+{
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span role="status">Loading...</span>
+    </button>
+}
+else
+{
+    <table class="table table-dark table-hover mt-3">
+        <thead>
+            <tr>
+                <th>ItemName</th>
+                <th>Quantity</th>
+                <th>ShopName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inventory in inventories)
+            {
+                <tr>
+                    <td>@inventory.ItemName</td>
+                    <td>@inventory.Quantity</td>
+                    <td>@inventory.ShopName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

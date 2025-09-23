@@ -5,10 +5,13 @@
         "editweapon",
         "gamestore",
         "Hsts",
+        "labelledby",
         "Mediat",
+        "onclick",
         "rendermode",
         "Somes",
         "stylesheet",
-        "Succ"
+        "Succ",
+        "tabindex"
     ]
 }

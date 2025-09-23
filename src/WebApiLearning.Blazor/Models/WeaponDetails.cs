@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
-using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Blazor.Models;
 
 public class WeaponDetails
 {
+    public Guid Id { get; set; }
+
     [Required(AllowEmptyStrings = false, ErrorMessage = "Name is required.")]
     public required string Name { get; set; }
 
     [Required(AllowEmptyStrings = false, ErrorMessage = "Rarity is required.")]
-    public ERarity Rarity { get; set; }
+    public EItemRarity Rarity { get; set; }
 
     [Required(AllowEmptyStrings = false, ErrorMessage = "Damage is required.")]
     [Range(
@@ -51,7 +52,7 @@ public class WeaponDetails
         new()
         {
             Name = string.Empty,
-            Rarity = ERarity.Common,
+            Rarity = EItemRarity.Common,
             Damage = 0,
             AttackSpeed = 0m,
             PurchasePrice = 0,

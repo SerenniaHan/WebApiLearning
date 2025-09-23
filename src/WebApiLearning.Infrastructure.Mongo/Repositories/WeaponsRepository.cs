@@ -5,7 +5,7 @@ using WebApiLearning.Domain.Repository;
 
 namespace WebApiLearning.Infrastructure.Mongo.Repositories;
 
-public class WeaponsRepository : IGameItemRepository<Weapon>
+public class WeaponsRepository : IWeaponRepository
 {
     private readonly string _collectionName = "game_items";
     private readonly IMongoCollection<Weapon> _weapons;
@@ -16,34 +16,47 @@ public class WeaponsRepository : IGameItemRepository<Weapon>
         _weapons = database.GetCollection<Weapon>(_collectionName);
     }
 
-    public async Task CreateGameObjectAsync(Weapon gameObject)
+    public async Task CreateAsync(Weapon entity, CancellationToken cancellationToken = default)
     {
-        await _weapons.InsertOneAsync(gameObject);
+        await _weapons.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 
-    public async Task<Weapon> GetGameObjectByIdAsync(Guid id)
+    public async Task<Weapon> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _weapons
             .Find(_filterBuilder.Eq(weapon => weapon.Id, id))
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<Weapon>> GetAllGameObjectsAsync()
+    public async Task<IReadOnlyCollection<Weapon>> GetAllAsync(
+        CancellationToken cancellationToken = default
+    )
     {
-        var weapons = await _weapons.Find(new BsonDocument()).ToListAsync();
-        return weapons;
+        return await _weapons.Find(new BsonDocument()).ToListAsync(cancellationToken);
     }
 
-    public async Task DeleteGameObjectAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await _weapons.DeleteOneAsync(_filterBuilder.Eq(weapon => weapon.Id, id));
+        var result = await _weapons.DeleteOneAsync(
+            _filterBuilder.Eq(weapon => weapon.Id, id),
+            cancellationToken
+        );
+        return result.DeletedCount > 0;
     }
 
-    public async Task UpdateGameObjectAsync(Weapon gameObject)
+    public async Task UpdateAsync(Weapon entity, CancellationToken cancellationToken = default)
     {
         await _weapons.ReplaceOneAsync(
-            _filterBuilder.Eq(existingWeapon => existingWeapon.Id, gameObject.Id),
-            gameObject
+            _filterBuilder.Eq(existingWeapon => existingWeapon.Id, entity.Id),
+            entity,
+            cancellationToken: cancellationToken
         );
+    }
+
+    public async Task<Weapon?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await _weapons
+            .Find(_filterBuilder.Eq(weapon => weapon.Name, name))
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

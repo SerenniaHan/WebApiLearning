@@ -2,9 +2,7 @@ using WebApiLearning.Domain.Entities;
 
 namespace WebApiLearning.Domain.Repository;
 
-public interface IShopRepository
+public interface IShopRepository : ICrudRepository<Shop>
 {
-    Task<Shop> GetByIdAsync(Guid id);
-    Task<IReadOnlyCollection<Shop>> GetShopsAsync();
-    Task CreateShopAsync(Shop shop);
+    Task<Shop?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
 }

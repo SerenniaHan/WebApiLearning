@@ -1,0 +1,61 @@
+@page "/weapons"
+@attribute [StreamRendering]
+@inject WeaponService WeaponService
+
+<PageTitle>Weapons</PageTitle>
+
+<h1>Weapons</h1>
+
+<div class="mb-3 mt-2">
+    <div class="form-text mb-5">This is a weapon page.</div>
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <a class="btn btn-primary" role="button" href="/editweapon">New Weapon</a>
+        </div>
+        <div class="col-auto">
+        </div>
+        <div class="col-auto">
+        </div>
+    </div>
+</div>
+
+@if (weapons == null)
+{
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span role="status">Loading...</span>
+    </button>
+}
+else
+{
+    <table class="table table-dark table-hover mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Damage</th>
+                <th />
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var weapon in weapons)
+            {
+                <tr>
+                    <td>@weapon.Name</td>
+                    <td>@weapon.Damage</td>
+                    <td>
+                        <div>
+                            <a class="btn btn-primary me-2" role="button" href="@EditWeaponUrl(weapon.Id)">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#@DeleteWeapon.GetModalId(weapon)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        <DeleteWeapon Weapon="@weapon" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
