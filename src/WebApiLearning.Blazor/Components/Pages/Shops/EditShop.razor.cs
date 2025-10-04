@@ -53,4 +53,9 @@ public partial class EditShop
         }
         Navigation.NavigateTo("/shops");
     }
+
+    private void GoToInventoryPage()
+    {
+        Navigation.NavigateTo("/inventories");
+    }
 }

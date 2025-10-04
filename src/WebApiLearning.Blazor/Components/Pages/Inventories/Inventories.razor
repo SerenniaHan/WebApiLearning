@@ -16,23 +16,26 @@
 }
 else
 {
-    <table class="table table-dark table-hover mt-3">
-        <thead>
-            <tr>
-                <th>ItemName</th>
-                <th>Quantity</th>
-                <th>ShopName</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var inventory in inventories)
-            {
+    <div class="table-responsive">
+        <table class="table table-dark table-hover mt-3">
+            <thead>
                 <tr>
-                    <td>@inventory.ItemName</td>
-                    <td>@inventory.Quantity</td>
-                    <td>@inventory.ShopName</td>
+                    <th>ItemName</th>
+                    <th>Quantity</th>
+                    <th>ShopName</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var inventory in inventories)
+                {
+                    <tr>
+                        <td>@inventory.ItemName</td>
+                        <td>@inventory.Quantity</td>
+                        <td>@inventory.ShopName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
 }
