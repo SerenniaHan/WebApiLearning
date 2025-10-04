@@ -1,6 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["Directory.Build.props", "."]
+COPY ["Directory.Build.targets", "."]
+COPY ["Directory.Packages.props", "."]
 COPY ["src/WebApiLearning.Api/WebApiLearning.Api.csproj", "src/WebApiLearning.Api/"]
 COPY ["src/WebApiLearning.Application/WebApiLearning.Application.csproj", "src/WebApiLearning.Application/"]
 COPY ["src/WebApiLearning.Domain/WebApiLearning.Domain.csproj", "src/WebApiLearning.Domain/"]
