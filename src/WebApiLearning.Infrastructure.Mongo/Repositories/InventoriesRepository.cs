@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using WebApiLearning.Domain.Entities;
 using WebApiLearning.Domain.Repository;
@@ -8,12 +9,11 @@ namespace WebApiLearning.Infrastructure.Mongo.Repositories;
 public class InventoriesRepository : IInventoryRepository
 {
     private readonly string _collectionName = "inventories";
-    private readonly IMongoCollection<Inventory> _collection;
-    private readonly FilterDefinitionBuilder<Inventory> _filterBuilder = Builders<Inventory>.Filter;
+    private readonly IMongoCollection<BsonDocument> _bsonCollection;
 
     public InventoriesRepository(IMongoDatabase mongoDatabase)
     {
-        _collection = mongoDatabase.GetCollection<Inventory>(_collectionName);
+        _bsonCollection = mongoDatabase.GetCollection<BsonDocument>(_collectionName);
     }
 
     public async Task<IReadOnlyCollection<Inventory>> GetInventoriesByShopIdAsync(
@@ -21,15 +21,31 @@ public class InventoriesRepository : IInventoryRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _collection
-            .Find(_filterBuilder.Eq(i => i.ShopId, shopId))
+        var documents = await _bsonCollection
+            .Aggregate()
+            .Match(new BsonDocument("ShopId", shopId.ToString()))
+            .Lookup("shops", "ShopId", "_id", "shop")
+            .Unwind("shop")
+            .Lookup("game_items", "ItemId", "_id", "items")
+            .Unwind("items")
+            .Project(
+                new BsonDocument
+                {
+                    { "_id", 0 },
+                    { "Quantity", 1 },
+                    { "ShopName", "$shop.Name" },
+                    { "ItemName", "$items.Name" },
+                }
+            )
             .ToListAsync(cancellationToken);
+
+        return [.. documents.Select(doc => BsonSerializer.Deserialize<Inventory>(doc))];
     }
 
-    public async Task CreateAsync(Inventory entity, CancellationToken cancellationToken = default)
-    {
-        await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
-    }
+    public async Task CreateAsync(
+        Inventory entity,
+        CancellationToken cancellationToken = default
+    ) { }
 
     public async Task<Inventory> GetByIdAsync(
         Guid id,
@@ -45,7 +61,24 @@ public class InventoriesRepository : IInventoryRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _collection.Find(new BsonDocument()).ToListAsync(cancellationToken);
+        var documents = await _bsonCollection
+            .Aggregate()
+            .Lookup("shops", "ShopId", "_id", "shop")
+            .Unwind("shop")
+            .Lookup("game_items", "ItemId", "_id", "items")
+            .Unwind("items")
+            .Project(
+                new BsonDocument
+                {
+                    { "_id", 0 },
+                    { "Quantity", 1 },
+                    { "ShopName", "$shop.Name" },
+                    { "ItemName", "$items.Name" },
+                }
+            )
+            .ToListAsync(cancellationToken);
+
+        return [.. documents.Select(doc => BsonSerializer.Deserialize<Inventory>(doc))];
     }
 
     public async Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default)

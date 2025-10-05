@@ -1,0 +1,43 @@
+const { env } = require('../env.js');
+
+use(env.databaseName);
+
+// get all inventories
+db[env.inventoryCollection].aggregate([
+    {
+        $lookup: {
+            from: env.shopCollection,
+            localField: "ShopId",
+            foreignField: "_id",
+            as: "shop"
+        }
+    },
+    {
+        $unwind: "$shop"
+    },
+    {
+        $lookup: {
+            from: env.itemCollection,
+            localField: "ItemId",
+            foreignField: "_id",
+            as: "items"
+        }
+    },
+    {
+        $unwind: "$items"
+    },
+    {
+        $project: {
+            _id: 1,
+            ShopInfo: {
+                ShopId: "$shop._id",
+                ShopName: "$shop.Name"
+            },
+            ItemInfo: {
+                ItemId: "$items._id",
+                ItemName: "$items.Name"
+            },
+            Quantity: 1
+        }
+    }
+])
